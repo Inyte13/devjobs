@@ -1,0 +1,96 @@
+users
+-- default
+first_name index
+last_name index
+email
+password
+is_active 
+is_staff, si puede acceder al ADMIN
+is_superuser
+last_login
+--
+id
+# status, no esta porque lo reemplaza is_active
+created
+created_id | None
+modified
+modified_id | None
+
+candidates
+id
+user_id
+description
+cv max 5mb
+seniority enum
+experienceYears
+status
+created
+created_id | None
+modified
+modified_id | None
+
+candidates_technologies
+id_candidate
+id_technology
+
+technologies
+id
+name
+status
+created
+created_id
+modified
+modified_id | None
+
+recruiters
+id
+user_id unique
+id_company
+description
+status
+created
+created_id | None
+modified
+modified_id | None
+
+companies
+id
+user_id
+name
+status
+created
+created_id | None
+modified
+modified_id | None
+
+offers
+id
+recruiter_id
+title
+description
+location
+modality
+seniority
+status
+salario | None
+created
+created_id 
+modified
+modified_id | None
+
+
+TrabajoTecnologia
+offer_id
+technology_id
+
+
+Aplicaciones
+id
+offer_id
+candidate_id
+recruiter_id
+state
+created
+created_id
+modified
+modified_id | None
