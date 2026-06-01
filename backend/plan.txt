@@ -94,3 +94,62 @@ created
 created_id
 modified
 modified_id | None
+
+Usuario
+id
+email
+contrasena
+first_name
+last_name
+
+Candidato
+id
+id_usuario fk unique
+descripcion
+cv max 5mb
+seniority
+anos_experience
+
+CandidatoTecnologia
+id_candidato
+id_tecnologia
+
+Tecnologia
+id
+nombre
+
+Reclutador
+id
+id_usuario
+id_empresa
+descripcion
+
+Empresa
+id
+id_usuario
+nombre
+
+Trabajos
+id
+id_empresa
+titulo
+descripcion
+ubicacion
+modalidad
+seniority
+estado
+salario | None
+
+TrabajoTecnologia
+id_trabajo
+id_tecnologia
+
+Aplicaciones
+id
+id_trabajo
+id_candidato
+id_reclutador | None
+estado
+
+
+
