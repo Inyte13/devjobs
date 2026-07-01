@@ -1,16 +1,10 @@
 import uuid
 from collections.abc import Iterable
 
-from apps.jobs.models.enums import Seniority
+from apps.jobs.models.enums import Modality, Seniority
 from devjobs import settings
 from django.core.validators import MinLengthValidator
 from django.db import models
-
-
-class Modality(models.TextChoices):
-  REMOTE = 'remote'
-  PRESENTIAL = 'presential'
-  HYBRID = 'hybrid'
 
 
 class Offer(models.Model):

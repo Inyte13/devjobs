@@ -96,7 +96,7 @@ export default function Job () {
   return (
     <main className={styles.mainJob}>
       <nav className={styles.breadcrumb}>
-        <Link href='/busqueda'>Empleos</Link>
+        <Link href='/offers'>Empleos</Link>
         <span className={styles.breadcrumbSeparacion}>/</span>
         <span className={styles.breadcrumbActual}>{job.titulo}</span>
       </nav>

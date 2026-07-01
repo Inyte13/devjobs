@@ -46,6 +46,7 @@ class OfferResponseSummary(Schema):
   title: str
   location: LocationResponseSummary
   modality: Modality
+  seniority: Seniority
   technologies: list[TechnologyResponse]
 
   # Para que se ejecute tengo que llamar al all()
@@ -62,7 +63,7 @@ class OfferResponseDetail(Schema):
   title: str
   description: str
   location: LocationResponseSummary
-  modality: str
+  modality: Modality
   seniority: Seniority
   salary: Decimal | None
   technologies: list[TechnologyResponse]

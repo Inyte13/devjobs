@@ -1,5 +1,6 @@
 import uuid
 
+from apps.jobs.models.enums import Seniority
 from apps.jobs.models.offer import Modality, Offer
 from apps.jobs.models.recruiter import Recruiter
 from apps.jobs.schemas.offer import OfferCreate, OfferUpdate
@@ -15,6 +16,7 @@ class OfferService:
     location_id: uuid.UUID | None,
     modality: Modality | None,
     technology_id: uuid.UUID | None,
+    seniority: Seniority | None,
   ) -> QuerySet[Offer]:
     # Prefetch porque traigo antes las technologies y no solo los ids para que django no busque uno por uno (N + 1)
     query = Offer.objects.filter(status=True).prefetch_related('technologies')
@@ -26,6 +28,8 @@ class OfferService:
       query = query.filter(modality=modality)
     if technology_id:
       query = query.filter(technologies__id=technology_id)
+    if seniority:
+      query = query.filter(seniority=seniority)
     return query
 
   def get_all_by_recruiter(
@@ -35,6 +39,7 @@ class OfferService:
     location_id: uuid.UUID | None,
     modality: Modality | None,
     technology_id: uuid.UUID | None,
+    seniority: Seniority | None,
   ) -> QuerySet[Offer]:
     query = Offer.objects.filter(
       status=True, recruiter=recruiter_bd
@@ -47,6 +52,8 @@ class OfferService:
       query = query.filter(modality=modality)
     if technology_id:
       query = query.filter(technologies__id=technology_id)
+    if seniority:
+      query = query.filter(seniority=seniority)
     return query
 
   def get(self, id: uuid.UUID) -> Offer:

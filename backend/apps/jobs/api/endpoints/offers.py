@@ -1,6 +1,7 @@
 import uuid
 
 from apps.jobs.api.permissions import RecruiterAuth
+from apps.jobs.models.enums import Seniority
 from apps.jobs.models.offer import Modality
 from apps.jobs.schemas.application import ApplicationResponseRecruiter
 from apps.jobs.schemas.offer import (
@@ -26,8 +27,9 @@ def get_all(
   location_id: uuid.UUID | None = None,
   modality: Modality | None = None,
   technology_id: uuid.UUID | None = None,
+  seniority: Seniority | None = None,
 ):
-  return offer_service.get_all(title, location_id, modality, technology_id)
+  return offer_service.get_all(title, location_id, modality, technology_id, seniority)
 
 
 @router_offers.get(
@@ -40,9 +42,10 @@ def get_all_by_recruiter(
   location_id: uuid.UUID | None = None,
   modality: Modality | None = None,
   technology_id: uuid.UUID | None = None,
+  seniority: Seniority | None = None,
 ):
   return offer_service.get_all_by_recruiter(
-    request.auth, title, location_id, modality, technology_id
+    request.auth, title, location_id, modality, technology_id, seniority
   )
 
 

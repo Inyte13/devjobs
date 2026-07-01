@@ -11,13 +11,13 @@ class ApplicationCreate(BaseModel):
   offer_id: uuid.UUID
 
 
-class ApplicationResponse(BaseModel):
-  id: uuid.UUID
-  offer_id: uuid.UUID
-  candidate_id: uuid.UUID
-  status: Status
-  created: datetime
-  modified: datetime
+# class ApplicationResponse(BaseModel):
+#   id: uuid.UUID
+#   offer_id: uuid.UUID
+#   candidate_id: uuid.UUID
+#   status: Status
+#   created: datetime
+#   modified: datetime
 
 
 class ApplicationResponseRecruiter(BaseModel):

@@ -1,14 +1,8 @@
 import uuid
 
+from apps.jobs.models.enums import Status
 from devjobs import settings
 from django.db import models
-
-
-class Status(models.TextChoices):
-  PENDING = 'pending'
-  REVIEWED = 'reviewed'
-  REJECTED = 'rejected'
-  HIRED = 'hired'
 
 
 class Application(models.Model):

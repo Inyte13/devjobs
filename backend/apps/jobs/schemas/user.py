@@ -41,7 +41,6 @@ class UserResponseRecruiter(BaseModel):
 
 
 class UserResponseCandidate(UserResponseRecruiter):
-  first_name: str
   last_name: str
 
 

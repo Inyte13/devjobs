@@ -7,3 +7,16 @@ class Seniority(models.TextChoices):
   MID = 'mid'
   SENIOR = 'senior'
   LEAD = 'lead'
+
+
+class Modality(models.TextChoices):
+  REMOTE = 'remote'
+  PRESENTIAL = 'presential'
+  HYBRID = 'hybrid'
+
+
+class Status(models.TextChoices):
+  PENDING = 'pending'
+  REVIEWED = 'reviewed'
+  REJECTED = 'rejected'
+  HIRED = 'hired'
