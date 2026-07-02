@@ -2,6 +2,15 @@ import { OfferCard } from '@/components/offer-card'
 import { Pagination } from '@/components/pagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useFilters } from '@/hooks/useFilters'
 import { Modality, Seniority } from '@/types/enums'
 import { Search } from 'lucide-react'
@@ -15,26 +24,24 @@ export default function Offers() {
     technologies,
     inputText,
     manejarInputText,
+    locationFilter,
     handleLocation,
+    modalityFilter,
     handleModality,
+    technologyFilter,
     handleTechnology,
+    seniorityFilter,
     handleSeniority,
     NUMERO_DE_PAGINAS,
     pagina,
     cambiarPag,
   } = useFilters()
   const idSearch = useId()
-  const idLocation = useId()
-  const idModality = useId()
-  const idTechnology = useId()
-  const idSeniority = useId()
   return (
-    <>
-      <section className='flex min-h-[30vh] flex-col items-center gap-4'>
-        <header className='px-12 py-8 text-center'>
-          <h1 className='pb-4 text-6xl font-bold'>
-            Encuentra tu próximo trabajo
-          </h1>
+    <div className='flex flex-col items-center'>
+      <section className='flex min-h-70 flex-col items-center justify-center gap-y-4 px-6 pt-8'>
+        <header className='flex flex-col gap-y-3 text-center'>
+          <h1 className='text-6xl font-bold'>Encuentra tu próximo trabajo</h1>
           <p className='text-lg'>
             Explora miles de oportunidades en el sector tecnológico.
           </p>
@@ -42,11 +49,11 @@ export default function Offers() {
         <form
           role='search'
           aria-label='Buscar en el sitio'
-          className='bg-card relative z-2 flex w-full max-w-187.5 rounded-xl p-1.5 text-center'
+          className='bg-card relative z-2 flex w-full rounded-xl p-1.5 text-center'
         >
           <Input
             name={idSearch}
-            id='q'
+            id='search'
             type='search'
             placeholder='Buscar empleos por título, habilidad o empresa'
             aria-label='Buscar'
@@ -59,67 +66,103 @@ export default function Offers() {
             <Search />
           </Button>
         </form>
-        <nav className='mx-auto flex max-w-250 gap-4 p-2'>
-          <select
-            className='bg-blue-2 rounded-[10px] border-none p-2 text-white'
-            name={idLocation}
-            id='filter-location'
-            onChange={e => handleLocation(e.target.value)}
+        <nav className='flex gap-4 p-1.5 self-start'>
+          <Select
+            value={locationFilter || undefined}
+            onValueChange={handleLocation}
           >
-            <option value=''>Ubicación</option>
-            {locations.map(location => (
-              <option key={location.id} value={location.id}>
-                {location.name}
-              </option>
-            ))}
-          </select>
-          <select
-            className='bg-blue-2 rounded-[10px] border-none p-2 text-white'
-            name={idModality}
-            id='filter-modality'
-            onChange={e => handleModality(e.target.value as Modality | '')}
+            <SelectTrigger>
+              <SelectValue placeholder='Ubicación' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Ubicación</SelectLabel>
+                {locations.map(location => (
+                  <SelectItem key={location.id} value={location.id}>
+                    {location.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Select
+            value={modalityFilter || undefined}
+            onValueChange={value => handleModality(value as Modality | '')}
           >
-            <option value=''>Modalidad</option>
-            {Object.values(Modality).map(modality => (
-              <option key={modality} value={modality}>
-                {modality}
-              </option>
-            ))}
-          </select>
-          <select
-            className='bg-blue-2 rounded-[10px] border-none p-2 text-white'
-            name={idTechnology}
-            id='filter-technology'
-            onChange={e => handleTechnology(e.target.value)}
+            <SelectTrigger className='capitalize'>
+              <SelectValue placeholder='Modalidad' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Modalidad</SelectLabel>
+                {Object.values(Modality).map(modality => (
+                  <SelectItem
+                    className='capitalize'
+                    key={modality}
+                    value={modality}
+                  >
+                    {modality}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={technologyFilter || undefined}
+            onValueChange={handleTechnology}
           >
-            <option value=''>Tecnología</option>
-            {technologies.map(tech => (
-              <option key={tech.id} value={tech.id}>
-                {tech.name}
-              </option>
-            ))}
-          </select>
-          <select
-            className='bg-blue-2 rounded-[10px] border-none p-2 text-white'
-            name={idSeniority}
-            id='filter-seniority'
-            onChange={e => handleSeniority(e.target.value as Seniority | '')}
+            <SelectTrigger className='*:data-[slot=select-value]:inline-block *:data-[slot=select-value]:lowercase *:data-[slot=select-value]:first-letter:uppercase'>
+              <SelectValue placeholder='Tecnología' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Tecnología</SelectLabel>
+                {technologies.map(tech => (
+                  <SelectItem
+                    className='*:[span]:last:inline-block *:[span]:last:lowercase *:[span]:last:first-letter:uppercase'
+                    key={tech.id}
+                    value={tech.id}
+                  >
+                    {tech.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={seniorityFilter || undefined}
+            onValueChange={value => handleSeniority(value as Seniority | '')}
           >
-            <option value=''>Nivel de experiencia</option>
-            {Object.values(Seniority).map(seniority => (
-              <option key={seniority} value={seniority}>
-                {seniority}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className='capitalize'>
+              <SelectValue placeholder='Nivel de experiencia' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Nivel de experiencia</SelectLabel>
+                {Object.values(Seniority).map(seniority => (
+                  <SelectItem
+                    className='capitalize'
+                    key={seniority}
+                    value={seniority}
+                  >
+                    {seniority}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </nav>
       </section>
-      <section>
-        <h2>Resultados de búsqueda</h2>
+      <section className='flex w-full max-w-230 min-w-100 flex-col items-center p-6 gap-y-2'>
+        <h2 className='self-start text-xl font-light'>
+          Resultados de búsqueda
+        </h2>
         {loading ? (
           <p className='m-auto text-center'>Cargando...</p>
         ) : (
-          <div>
+          <div className='flex w-full flex-col gap-y-3'>
             {offers.length === 0 && (
               <p className='p-4 text-center'>No se encontraron empleos</p>
             )}
@@ -134,6 +177,6 @@ export default function Offers() {
           cambiarPag={cambiarPag}
         />
       </section>
-    </>
+    </div>
   )
 }

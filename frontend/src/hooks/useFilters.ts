@@ -2,10 +2,7 @@ import { getAllLocations } from '@/services/location-service'
 import { getAllOffers } from '@/services/offer-service'
 import { getAllTechnologies } from '@/services/technology-service'
 import { Modality, Seniority } from '@/types/enums'
-import {
-  LocationResponseDetail,
-  LocationResponseSummary,
-} from '@/types/location'
+import { LocationResponseDetail } from '@/types/location'
 import { OfferResponseSummary } from '@/types/offer'
 import { TechnologyResponse } from '@/types/technology'
 import { useEffect, useRef, useState } from 'react'
@@ -165,9 +162,13 @@ export function useFilters() {
     technologies,
     inputText,
     manejarInputText,
+    locationFilter,
     handleLocation,
+    modalityFilter,
     handleModality,
+    technologyFilter,
     handleTechnology,
+    seniorityFilter,
     handleSeniority,
     NUMERO_DE_PAGINAS,
     pagina,

@@ -102,7 +102,7 @@
 .dark {
   --background: #111111;
   --foreground: var(--gray-12);
-  --card: var(--blue-2);
+  --card: var(--gray-2);
   --card-foreground: var(--gray-12);
   --popover: var(--gray-2);
   --popover-foreground: var(--gray-12);
