@@ -9,6 +9,8 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres-devjobs:/var/lib/postgresql/data
+      # Config de \x auto
+      - ~/.psqlrc:/root/.psqlrc
 
 volumes:
   postgres-devjobs:
