@@ -2,17 +2,19 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
 APPEND_SLASH = False
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = (
-  'django-insecure-sqnb$_(4v)vp*yh#0+rb%md#-4=2hr%f!z849*xp+e%t5lc($_'
+SECRET_KEY = os.getenv(
+  'SECRET_KEY',
+  'django-insecure-sqnb$_(4v)vp*yh#0+rb%md#-4=2hr%f!z849*xp+e%t5lc($_',
 )
 PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
 DEBUG = not PRODUCTION
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 AUTH_USER_MODEL = 'jobs.User'
 INSTALLED_APPS = [
   'django.contrib.admin',
@@ -27,10 +29,29 @@ INSTALLED_APPS = [
   'ninja_jwt.token_blacklist',
   'corsheaders',
 ]
-
-CORS_ALLOWED_ORIGINS = [
-  'http://localhost:5173',
-]
+if os.getenv('DATABASE_URL'):
+  DATABASES = {
+    'default': dj_database_url.config(
+      conn_max_age=600, conn_health_checks=True, ssl_require=True
+    )
+  }
+else:
+  DATABASES = {
+    'default': {
+      'ENGINE': 'django.db.backends.postgresql',
+      'NAME': os.getenv('POSTGRES_DB'),
+      'USER': os.getenv('POSTGRES_USER'),
+      'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+      'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+      'PORT': os.getenv('POSTGRES_PORT', '5432'),
+    }
+  }
+cors_origins = os.getenv('CORS_ALLOWED_ORIGINS')
+CORS_ALLOWED_ORIGINS = (
+  [origin.strip() for origin in cors_origins.split(',')]
+  if cors_origins
+  else ['http://localhost:5173', 'http://127.0.0.1:5173']
+)
 MIDDLEWARE = [
   'django.middleware.security.SecurityMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
