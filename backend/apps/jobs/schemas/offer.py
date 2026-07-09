@@ -6,6 +6,7 @@ from apps.jobs.models.enums import Seniority
 from apps.jobs.models.offer import Modality
 from apps.jobs.schemas.location import LocationResponseSummary
 from apps.jobs.schemas.recruiter import (
+  RecruiterResponseApplication,
   RecruiterResponsePublic,
   RecruiterResponseSummary,
 )
@@ -16,7 +17,7 @@ from pydantic import BaseModel, field_validator
 
 class OfferCreate(BaseModel):
   title: str = Field(min_length=3, max_length=255)
-  description: str = Field(min_length=10, max_length=500)
+  description_detail: str = Field(min_length=10, max_length=2000)
   location_id: uuid.UUID
   modality: Modality
   seniority: Seniority
@@ -31,10 +32,10 @@ class OfferCreate(BaseModel):
       raise ValueError('title no puede estar vacío')
     return v.lower()
 
-  @field_validator('description')
-  def validate_description(cls, v: str) -> str:
+  @field_validator('description_detail')
+  def validate_description_detail(cls, v: str) -> str:
     if v.strip() == '':
-      raise ValueError('description no puede estar vacío')
+      raise ValueError('description_detail no puede estar vacío')
     return v
 
 
@@ -44,9 +45,11 @@ class OfferResponseSummary(Schema):
   id: uuid.UUID
   recruiter: RecruiterResponseSummary
   title: str
+  description_summary: str
   location: LocationResponseSummary
   modality: Modality
   seniority: Seniority
+  salary: Decimal | None
   technologies: list[TechnologyResponse]
 
   # Para que se ejecute tengo que llamar al all()
@@ -61,7 +64,7 @@ class OfferResponseDetail(Schema):
   id: uuid.UUID
   recruiter: RecruiterResponsePublic
   title: str
-  description: str
+  description_detail: str
   location: LocationResponseSummary
   modality: Modality
   seniority: Seniority
@@ -76,9 +79,23 @@ class OfferResponseDetail(Schema):
     return obj.technologies.all()
 
 
+# Schema porque usamos el resolver de ninja
+class OfferResponseApplication(Schema):
+  model_config = {'from_attributes': True}
+  id: uuid.UUID
+  recruiter: RecruiterResponseApplication
+  title: str
+  location: LocationResponseSummary
+  modality: Modality
+  seniority: Seniority
+  salary: Decimal | None
+
+
 class OfferUpdate(BaseModel):
   title: str | None = Field(default=None, min_length=3, max_length=255)
-  description: str | None = Field(default=None, min_length=10, max_length=500)
+  description_detail: str | None = Field(
+    default=None, min_length=10, max_length=2000
+  )
   location_id: uuid.UUID | None = None
   modality: Modality | None = None
   seniority: Seniority | None = None
@@ -87,8 +104,8 @@ class OfferUpdate(BaseModel):
     default=None, ge=0, decimal_places=2, max_digits=10
   )
 
-  @field_validator('title', 'description')
-  def validate_title_description(cls, v: str | None, info) -> str:
+  @field_validator('title', 'description_detail')
+  def validate_title_description_detail(cls, v: str | None, info) -> str:
     if v is None:
       raise ValueError(f'{info.field_name} no puede ser null')
     return v

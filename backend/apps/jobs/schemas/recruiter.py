@@ -30,6 +30,10 @@ class RecruiterResponseSummary(BaseModel):
   company: CompanyResponseSummary
 
 
+class RecruiterResponseApplication(RecruiterResponseSummary):
+  user: UserResponseRecruiter
+
+
 class RecruiterResponsePublic(RecruiterResponseSummary):
   user: UserResponseRecruiter
   contact_email: EmailStr

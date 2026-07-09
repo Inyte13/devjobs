@@ -21,7 +21,7 @@ def get_me(request):
 
 
 @router_recruiters.post(
-  '/', auth=JWTAuth(), response={201: RecruiterResponsePrivate}
+  '', auth=JWTAuth(), response={201: RecruiterResponsePrivate}
 )
 def create(request, recruiter: RecruiterCreate):
   try:
@@ -31,7 +31,7 @@ def create(request, recruiter: RecruiterCreate):
 
 
 @router_recruiters.patch(
-  '/', auth=RecruiterAuth(), response=RecruiterResponsePrivate
+  '', auth=RecruiterAuth(), response=RecruiterResponsePrivate
 )
 def patch(request, recruiter: RecruiterUpdate):
   try:
@@ -41,7 +41,7 @@ def patch(request, recruiter: RecruiterUpdate):
 
 
 @router_recruiters.delete(
-  '/', auth=RecruiterAuth(), response=RecruiterResponsePrivate
+  '', auth=RecruiterAuth(), response=RecruiterResponsePrivate
 )
 def deactivate(request):
   return recruiter_service.deactivate(request.auth)

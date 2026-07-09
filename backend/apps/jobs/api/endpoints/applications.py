@@ -22,7 +22,7 @@ def get_all_by_candidate(request):
 
 
 @router_applications.post(
-  '/', auth=CandidateAuth(), response={201: ApplicationResponseCandidate}
+  '', auth=CandidateAuth(), response={201: ApplicationResponseCandidate}
 )
 def post(request, application: ApplicationCreate):
   try:

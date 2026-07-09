@@ -21,7 +21,7 @@ def get_me(request):
 
 
 @router_candidates.post(
-  '/', auth=JWTAuth(), response={201: CandidateResponsePrivate}
+  '', auth=JWTAuth(), response={201: CandidateResponsePrivate}
 )
 def create(request, candidate: CandidateCreate):
   try:
@@ -31,7 +31,7 @@ def create(request, candidate: CandidateCreate):
 
 
 @router_candidates.patch(
-  '/', auth=CandidateAuth(), response=CandidateResponsePrivate
+  '', auth=CandidateAuth(), response=CandidateResponsePrivate
 )
 def patch(request, candidate: CandidateUpdate):
   try:
@@ -41,7 +41,7 @@ def patch(request, candidate: CandidateUpdate):
 
 
 @router_candidates.delete(
-  '/', auth=CandidateAuth(), response=CandidateResponsePrivate
+  '', auth=CandidateAuth(), response=CandidateResponsePrivate
 )
 def deactivate(request):
   return candidate_service.deactivate(request.auth)

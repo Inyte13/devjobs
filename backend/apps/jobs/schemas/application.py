@@ -3,7 +3,7 @@ from datetime import datetime
 
 from apps.jobs.models.application import Status
 from apps.jobs.schemas.candidate import CandidateResponsePublic
-from apps.jobs.schemas.offer import OfferResponseSummary
+from apps.jobs.schemas.offer import OfferResponseApplication
 from pydantic import BaseModel, field_validator
 
 
@@ -32,7 +32,7 @@ class ApplicationResponseRecruiter(BaseModel):
 class ApplicationResponseCandidate(BaseModel):
   model_config = {'from_attributes': True}
   id: uuid.UUID
-  offer: OfferResponseSummary
+  offer: OfferResponseApplication
   status: Status
   created: datetime
   modified: datetime

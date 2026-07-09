@@ -19,7 +19,7 @@ from ninja.pagination import LimitOffsetPagination, paginate
 router_offers = Router(tags=['Offers'])
 
 
-@router_offers.get('/', response=list[OfferResponseSummary])
+@router_offers.get('', response=list[OfferResponseSummary])
 @paginate(LimitOffsetPagination)
 def get_all(
   request,
@@ -29,7 +29,9 @@ def get_all(
   technology_id: uuid.UUID | None = None,
   seniority: Seniority | None = None,
 ):
-  return offer_service.get_all(title, location_id, modality, technology_id, seniority)
+  return offer_service.get_all(
+    title, location_id, modality, technology_id, seniority
+  )
 
 
 @router_offers.get(
@@ -67,7 +69,7 @@ def get_applications(request, id: uuid.UUID):
 
 
 @router_offers.post(
-  '/', auth=RecruiterAuth(), response={201: OfferResponseDetail}
+  '', auth=RecruiterAuth(), response={201: OfferResponseDetail}
 )
 def post(request, offer: OfferCreate):
   return offer_service.create(request.auth, offer)

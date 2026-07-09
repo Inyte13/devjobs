@@ -5,6 +5,6 @@ from ninja import Router
 router_technologies = Router(tags=['Technologies'])
 
 
-@router_technologies.get('/', response=list[TechnologyResponse])
+@router_technologies.get('', response=list[TechnologyResponse])
 def get_all(request):
   return technology_service.get_all()

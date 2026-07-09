@@ -5,6 +5,6 @@ from ninja import Router
 router_locations = Router(tags=['Locations'])
 
 
-@router_locations.get('/', response=list[LocationResponseDetail])
+@router_locations.get('', response=list[LocationResponseDetail])
 def get_all(request):
   return location_service.get_all()

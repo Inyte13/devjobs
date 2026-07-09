@@ -13,8 +13,8 @@ class Offer(models.Model):
     'Recruiter', on_delete=models.PROTECT, related_name='+'
   )
   title = models.CharField(validators=[MinLengthValidator(3)], max_length=255)
-  description = models.CharField(
-    validators=[MinLengthValidator(10)], max_length=500
+  description_detail = models.CharField(
+    validators=[MinLengthValidator(10)], max_length=2000
   )
   location = models.ForeignKey(
     'Location', on_delete=models.PROTECT, related_name='+'
@@ -54,3 +54,13 @@ class Offer(models.Model):
   ) -> None:
     self.title = self.title.strip().upper()
     super().save(force_insert, force_update, using, update_fields)
+
+  @property
+  def description_summary(self) -> str:
+    palabras = self.description_detail.split()
+    texto_plano = ' '.join(palabras)
+    if len(texto_plano) <= 250:
+      return texto_plano
+    # rsplit: inicia de atras -> adelante
+    # 1: cuantos cortes hago
+    return texto_plano[0:250].rsplit(' ', 1)[0]

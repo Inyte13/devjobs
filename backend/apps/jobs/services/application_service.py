@@ -29,7 +29,6 @@ class ApplicationService:
       .select_related(
         'offer__recruiter__user', 'offer__recruiter__company', 'offer__location'
       )
-      .prefetch_related('offer__technologies')
     )
 
   def create(
@@ -55,7 +54,6 @@ class ApplicationService:
       Application.objects.select_related(
         'offer__recruiter__user', 'offer__recruiter__company', 'offer__location'
       )
-      .prefetch_related('offer__technologies')
       .get(id=application_bd.id)
     )
 
