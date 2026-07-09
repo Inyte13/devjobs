@@ -1,177 +1,79 @@
-import { getAllLocations } from '@/services/location-service'
-import { getAllOffers } from '@/services/offer-service'
-import { getAllTechnologies } from '@/services/technology-service'
-import { Modality, Seniority } from '@/types/enums'
-import { LocationResponseDetail } from '@/types/location'
-import { OfferResponseSummary } from '@/types/offer'
-import { TechnologyResponse } from '@/types/technology'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
-
-const OFFERS_POR_PAGINA = 3
+import { useDebounce } from './useDebounce'
+import { Modality, Seniority } from '@/types/enums'
+import { setFilterParam } from '@/utils/filters'
+import { FILTER_PARAMS, LIMIT } from '@/lib/constants'
 
 export function useFilters() {
-  // Usamos useRef para la persistencia, donde la variable inicializada estará en 'current'
-  const timeoutId = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [searchParams, setSearchParams] = useSearchParams()
-  const [pagina, setPagina] = useState(() => {
-    const urlPag = searchParams.get('pagina')
-    return urlPag ? Number(urlPag) : 1
-  })
-  const cambiarPag = (page: number) => {
-    setPagina(page)
-  }
-  // Es una fx para que se ejecute una vez
-  const [inputText, setInputText] = useState(
-    () => searchParams.get('text') || ''
+  const stringFilters = useMemo(
+    () =>
+      Object.fromEntries(
+        FILTER_PARAMS.map(key => [key, searchParams.get(key) ?? null])
+      ) as Record<
+        (typeof FILTER_PARAMS)[number], //  "location_id" | "technology_id"
+        string | null
+      >,
+    [searchParams]
   )
-  const manejarInputText = (value: string) => {
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current)
-    }
-    timeoutId.current = setTimeout(() => {
-      setInputText(value)
-    }, 500)
-    setPagina(1)
+  const filters = {
+    ...stringFilters,
+    title: searchParams.get('title') ?? '',
+    modality: (searchParams.get('modality') as Modality) ?? null,
+    seniority: (searchParams.get('seniority') as Seniority) ?? null,
   }
-
-  const [locationFilter, setLocationFilter] = useState(
-    () => searchParams.get('location_id') || ''
-  )
-  const handleLocation = (value: string) => {
-    setLocationFilter(value)
-    setPagina(1)
-  }
-
-  const [modalityFilter, setmodalityFilter] = useState<Modality | ''>(
-    () => (searchParams.get('modality') as Modality) || ''
-  )
-  const handleModality = (value: Modality | '') => {
-    setmodalityFilter(value)
-    setPagina(1)
-  }
-
-  const [technologyFilter, setTechnologyFilter] = useState(
-    () => searchParams.get('technology_id') || ''
-  )
-  const handleTechnology = (value: string) => {
-    setTechnologyFilter(value)
-    setPagina(1)
-  }
-
-  const [seniorityFilter, setSeniorityFilter] = useState<Seniority | ''>(
-    () => (searchParams.get('seniority') as Seniority) || ''
-  )
-  const handleSeniority = (value: Seniority | '') => {
-    setSeniorityFilter(value)
-    setPagina(1)
-  }
-
-  const [offers, setOffers] = useState<OfferResponseSummary[]>([])
-  const [total, setTotal] = useState(0)
-  const [locations, setLocations] = useState<LocationResponseDetail[]>([])
-  const [technologies, setTechnologies] = useState<TechnologyResponse[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchOptions() {
-      try {
-        const [locations, technologies] = await Promise.all([
-          getAllLocations(),
-          getAllTechnologies(),
+  const setFilter = useMemo(
+    () =>
+      // fromEntries: Convierte [['a', 1], ['b', 2]] => { a: 1, b: 2 }
+      Object.fromEntries(
+        FILTER_PARAMS.map(param => [
+          param,
+          setFilterParam(param, setSearchParams),
         ])
-        setLocations(locations)
-        setTechnologies(technologies)
-      } catch (error) {
-        console.error('Error fetching filter options:', error)
-      }
-    }
-    fetchOptions()
-  }, [])
+      ) as Record<
+        (typeof FILTER_PARAMS)[number], //  "location_id" | "technology_id"
+        (value: string | null) => void
+      >,
+    [setSearchParams]
+  )
+
+  const setTitle = setFilterParam('title', setSearchParams)
+  const setModality = setFilterParam<Modality>('modality', setSearchParams)
+  const setSeniority = setFilterParam<Seniority>('seniority', setSearchParams)
+
+  const [inputText, setInputText] = useState(() => filters.title)
+  const debouncedSearch = useDebounce(inputText, 300)
 
   useEffect(() => {
-    async function fetchOffers() {
-      try {
-        setLoading(true)
-        const offset = (pagina - 1) * OFFERS_POR_PAGINA
-        const json = await getAllOffers(
-          inputText || undefined,
-          locationFilter || undefined,
-          (modalityFilter as Modality) || undefined,
-          technologyFilter || undefined,
-          (seniorityFilter as Seniority) || undefined,
-          OFFERS_POR_PAGINA,
-          offset
-        )
-        setOffers(json.items)
-        setTotal(json.count)
-      } catch (error) {
-        console.error('Error fetching offers:', error)
-      } finally {
-        setLoading(false)
-      }
+    if (debouncedSearch !== filters.title) {
+      setTitle(debouncedSearch)
     }
-    fetchOffers()
-  }, [
-    inputText,
-    technologyFilter,
-    locationFilter,
-    modalityFilter,
-    seniorityFilter,
-    pagina,
-  ])
+    //Incluir setTitle/setFilter aquí provoca una doble ejecución (aún memoizando) del efecto por cada búsqueda. Solo debouncedSearch debe disparar este efecto
+  }, [debouncedSearch]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    setSearchParams(params => {
-      if (inputText) params.set('title', inputText)
-      else params.delete('title')
+  // Number(null) = 0
+  const pagina = Number(searchParams.get('pagina')) || 1
 
-      if (technologyFilter) params.set('technology_id', technologyFilter)
-      else params.delete('technology_id')
+  const toPagina = (newPagina: number) => {
+    // Es una copia porque al renderizar en pagination, tiene que saber el valor de antemano ejecutando asi el toPagina por cada calculo
+    const params = new URLSearchParams(searchParams)
+    params.set('pagina', String(newPagina))
+    return `?${params.toString()}`
+  }
 
-      if (locationFilter) params.set('location_id', locationFilter)
-      else params.delete('location_id')
-
-      if (modalityFilter) params.set('modality', modalityFilter)
-      else params.delete('modality')
-
-      if (seniorityFilter) params.set('seniority', seniorityFilter)
-      else params.delete('seniority')
-
-      if (pagina > 1) params.set('pagina', String(pagina))
-      else params.delete('pagina')
-
-      return params
-    })
-  }, [
-    inputText,
-    technologyFilter,
-    locationFilter,
-    modalityFilter,
-    seniorityFilter,
-    pagina,
-  ])
-
-  // Para calcular el número de páginas, usando el total
-  const NUMERO_DE_PAGINAS = Math.ceil(total / OFFERS_POR_PAGINA)
+  const offset = (pagina - 1) * LIMIT
 
   return {
-    offers,
-    loading,
-    locations,
-    technologies,
+    searchParams,
     inputText,
-    manejarInputText,
-    locationFilter,
-    handleLocation,
-    modalityFilter,
-    handleModality,
-    technologyFilter,
-    handleTechnology,
-    seniorityFilter,
-    handleSeniority,
-    NUMERO_DE_PAGINAS,
+    setInputText,
+    filters,
+    setFilter,
+    setModality,
+    setSeniority,
     pagina,
-    cambiarPag,
+    toPagina,
+    offset,
   }
 }

@@ -10,7 +10,7 @@ export const candidateCreate = z.object({
   experience_years: z.number().min(0).max(50),
 })
 
-export type CandidateCreate = z.infer<typeof candidateCreate>
+export type CandidateCreate = z.output<typeof candidateCreate>
 
 export const candidateUpdate = z.object({
   description: z.preprocess(
@@ -21,4 +21,4 @@ export const candidateUpdate = z.object({
   experience_years: z.number().min(0).max(50).optional(),
 })
 
-export type CandidateUpdate = z.infer<typeof candidateUpdate>
+export type CandidateUpdate = z.output<typeof candidateUpdate>

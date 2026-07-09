@@ -6,18 +6,21 @@ import { useNavigate } from 'react-router'
 
 export default function Home() {
   const navigate = useNavigate()
-  const manejarBusqueda = (e: React.FormEvent<HTMLFormElement>) => {
+
+  // currentTarget: burbujea
+  // target: donde de verdad pasa
+  const handleBusqueda = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const terminoDeBusqueda = String(formData.get('search'))
-    const url = terminoDeBusqueda
-      ? `/offers?title=${encodeURIComponent(terminoDeBusqueda)}` // '' === %20
+    const formData = new FormData(e.currentTarget) // currentTarget por TS
+    const busqueda = String(formData.get('busqueda')) // No es un File
+    const url = busqueda
+      ? `/offers?title=${encodeURIComponent(busqueda)}`
       : '/offers'
     navigate(url)
   }
 
   return (
-    <>
+    <div className='flex flex-1 flex-col gap-y-8 w-full pb-8'>
       <section
         className={cn(
           'relative flex h-[55vh] flex-col items-center justify-center gap-y-9 after:absolute after:z-1',
@@ -28,12 +31,12 @@ export default function Home() {
         )}
       >
         <img
-          src='..\public\persona-trabajando.jpg'
-          alt='persona-trabajando'
+          src='/persona-trabajando.jpg'
           className={cn(
             'absolute top-0 left-0 z-0 h-full w-full',
             'object-cover' // Mantiene la proporción
           )}
+          alt='persona-trabajando'
         />
         <h1 className='relative z-2 text-center text-6xl font-bold'>
           Encuentra el trabajo de tus sueños
@@ -43,26 +46,25 @@ export default function Home() {
           próxima oportunidad.
         </p>
         <form
-          onSubmit={manejarBusqueda}
+          onSubmit={handleBusqueda}
+          className='bg-card relative z-2 flex w-full max-w-187.5 rounded-xl p-1.5 text-center'
           role='search'
           aria-label='Buscar en el sitio'
-          className='bg-card relative z-2 flex w-full max-w-187.5 rounded-xl p-1.5 text-center'
         >
           <Input
-            name='search'
-            id='q'
+            name='busqueda'
             type='search'
             placeholder='Buscar empleos por título, habilidad o empresa'
-            aria-label='Buscar'
             autoComplete='off'
             className='text-card-foreground w-full border-0 outline-none'
+            aria-label='Buscar'
           />
           <Button variant='ghost' type='submit' aria-label='Enviar búsqueda'>
             <Search />
           </Button>
         </form>
       </section>
-      <section className='flex min-h-[30vh] flex-col items-center justify-center gap-8 py-20'>
+      <section className='flex min-h-[30vh] flex-col items-center justify-center gap-8'>
         <h2 className='text-4xl'>¿Por qué DevJobs?</h2>
         <p className='max-w-175 text-center text-xl'>
           DevJobs es la principal bolsa de trabajo para desarrolladores.
@@ -72,7 +74,7 @@ export default function Home() {
           <article className='bg-card flex max-w-112.5 flex-col gap-4 rounded-xl p-8 text-center'>
             <BriefcaseBusiness className='mx-auto h-12 w-12' />
             <h3 className='text-xl font-bold'>
-              Encuentra el trabajo de tus sueños
+              Encuentra tu trabajo
             </h3>
             <p>
               Busca miles de empleos de las mejores empresas de todo el mundo
@@ -96,6 +98,6 @@ export default function Home() {
           </article>
         </div>
       </section>
-    </>
+    </div>
   )
 }

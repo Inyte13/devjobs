@@ -9,7 +9,7 @@ export const recruiterCreate = z.object({
   contact_email: z.email(),
 })
 
-export type RecruiterCreate = z.infer<typeof recruiterCreate>
+export type RecruiterCreate = z.output<typeof recruiterCreate>
 
 export const recruiterUpdate = z.object({
   description: z.preprocess(
@@ -20,4 +20,4 @@ export const recruiterUpdate = z.object({
   contact_email: z.email().optional(),
 })
 
-export type RecruiterUpdate = z.infer<typeof recruiterUpdate>
+export type RecruiterUpdate = z.output<typeof recruiterUpdate>

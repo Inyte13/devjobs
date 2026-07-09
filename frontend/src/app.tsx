@@ -1,25 +1,35 @@
 import { Routes, Route } from 'react-router'
-import { Header } from './components/header'
 import { lazy } from 'react'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { OfferDetail } from './pages/offer-detail'
+import { Login } from './pages/login'
+import { Layout } from './pages/layout'
+import { AuthLayout } from './pages/auth-layout'
+import { Register } from './pages/register'
+import { queryClient } from './lib/query-client'
+import { Applications } from './pages/applications'
 
 const Home = lazy(() => import('./pages/home'))
 const Offers = lazy(() => import('./pages/offers'))
-// const Job = lazy(() => import('./pages/Job.jsx'))
 
 export function App() {
   return (
-    <>
-      <Header />
-      <main className='h-[calc(100vh-53px)] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
-        <Routes>
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route element={<Layout />}>
           <Route path='/' element={<Home />} />
           <Route path='/offers' element={<Offers />} />
-          {/* <Route path='/jobs/:id' element={<Job />} /> */}
-        </Routes>
-        <footer className='border-border border-t p-4 text-center'>
-          <p>&copy; 2025 DevJobs. Todos los derechos reservados.</p>
-        </footer>
-      </main>
-    </>
+          <Route path='/offers/:id' element={<OfferDetail />} />
+          <Route path='/applications' element={<Applications />} />
+        </Route>
+        <Route element={<AuthLayout />}>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+        </Route>
+      </Routes>
+
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }

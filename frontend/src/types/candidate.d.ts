@@ -2,7 +2,7 @@ import { Seniority } from './enums'
 import { UserResponseCandidate } from './user'
 
 export interface CandidateResponsePrivate {
-  description: str | None
+  description: str | null
   seniority: Seniority
   experience_years: number
 }

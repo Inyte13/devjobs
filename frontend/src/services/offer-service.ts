@@ -1,34 +1,37 @@
-import { Modality, Seniority } from '@/types/enums'
-import { OfferResponseDetail, OfferResponseSummary } from '@/types/offer'
+import {
+  Filters,
+  OfferResponseDetail,
+  OfferResponseSummary,
+} from '@/types/offer'
+import { HttpError } from './errors'
+import { BASE_URL } from '@/lib/constants';
 
-const BASE_URL = import.meta.env.VITE_API_URL || ''
 const URL = `${BASE_URL}/api/offers`
 
-export async function getAllOffers(
-  title?: string,
-  location_id?: string,
-  modality?: Modality,
-  technology_id?: string,
-  seniority?: Seniority,
-  limit?: number,
-  offset?: number
-): Promise<{ items: OfferResponseSummary[]; count: number }> {
+export async function getAllOffers({
+  title,
+  location_id,
+  modality,
+  technology_id,
+  seniority,
+  limit,
+  offset,
+}: Filters): Promise<{ items: OfferResponseSummary[]; count: number }> {
   const params = new URLSearchParams()
-  if (title !== undefined) params.append('title', title)
-  if (location_id !== undefined) params.append('location_id', location_id)
-  if (modality !== undefined) params.append('modality', modality)
-  if (technology_id !== undefined) params.append('technology_id', technology_id)
-  if (seniority !== undefined) params.append('seniority', seniority)
-  if (limit !== undefined) params.append('limit', String(limit))
-  if (offset !== undefined) params.append('offset', String(offset))
-
-  const res = await fetch(`${URL}/?${params.toString()}`)
-  if (!res.ok) throw new Error('Error al obtener las ofertas')
+  if (title !== null) params.append('title', title)
+  if (location_id !== null) params.append('location_id', location_id)
+  if (modality !== null) params.append('modality', modality)
+  if (technology_id !== null) params.append('technology_id', technology_id)
+  if (seniority !== null) params.append('seniority', seniority)
+  if (limit !== null) params.append('limit', String(limit))
+  if (offset !== null) params.append('offset', String(offset))
+  const res = await fetch(`${URL}?${params.toString()}`)
+  if (!res.ok) throw new HttpError(res.status, 'Error al obtener las ofertas')
   return res.json()
 }
 
 export async function getOffer(id: string): Promise<OfferResponseDetail> {
   const res = await fetch(`${URL}/${id}`)
-  if (!res.ok) throw new Error('Error al obtener la oferta')
+  if (!res.ok) throw new HttpError(res.status, 'Error al obtener la oferta')
   return res.json()
 }

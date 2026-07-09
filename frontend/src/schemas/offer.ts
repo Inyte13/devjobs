@@ -8,7 +8,7 @@ export const offerCreate = z.object({
   ),
   description: z.preprocess(
     v => (v === '' ? undefined : v),
-    z.string().min(10).max(500)
+    z.string().min(10).max(2000)
   ),
   location_id: z.uuid(),
   modality: z.enum(Modality),
@@ -20,7 +20,7 @@ export const offerCreate = z.object({
   ),
 })
 
-export type OfferCreate = z.infer<typeof offerCreate>
+export type OfferCreate = z.output<typeof offerCreate>
 
 export const offerUpdate = z.object({
   title: z.preprocess(
@@ -29,7 +29,7 @@ export const offerUpdate = z.object({
   ),
   description: z.preprocess(
     v => (v === '' ? undefined : v),
-    z.string().min(10).max(500).optional()
+    z.string().min(10).max(2000).optional()
   ),
   location_id: z.uuid().optional(),
   modality: z.enum(Modality).optional(),
@@ -41,4 +41,4 @@ export const offerUpdate = z.object({
   ),
 })
 
-export type OfferUpdate = z.infer<typeof offerUpdate>
+export type OfferUpdate = z.output<typeof offerUpdate>

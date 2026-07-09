@@ -1,6 +1,6 @@
 import { CandidateResponsePublic } from './candidate'
 import { Status } from './enums'
-import { OfferResponseSummary } from './offer'
+import { OfferResponseApplication } from './offer'
 
 export interface ApplicationResponseRecruiter {
   id: string
@@ -12,7 +12,7 @@ export interface ApplicationResponseRecruiter {
 
 export interface ApplicationResponseCandidate {
   id: string
-  offer: OfferResponseSummary
+  offer: OfferResponseApplication
   status: Status
   created: string
   modified: string
