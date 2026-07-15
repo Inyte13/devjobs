@@ -8,8 +8,8 @@ import { Outlet } from 'react-router'
 
 export function Layout() {
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
-  const role = useAuthStore(s => s.role)
-  const setRole = useAuthStore(s => s.setRole)
+  const role = useAuthStore(s => s.activeRole)
+  const setRole = useAuthStore(s => s.setActiveRole)
   const { data: candidate } = useQuery(candidateOptions(isAuthenticated))
   const { data: recruiter } = useQuery(recruiterOptions(isAuthenticated))
 
@@ -24,14 +24,14 @@ export function Layout() {
   }, [candidate, recruiter, role, setRole])
   // Outlet: Si hay un hijo route lo renderiza
   return (
-    <>
+    <div className='flex h-screen flex-col'>
       <Header />
-      <main className='flex h-[calc(100vh-53px)] flex-col items-center overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
+      <main className='flex flex-1 flex-col items-center overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
         <Outlet />
-        <footer className='border-border w-full border-t p-4 text-center'>
+        <footer className='border-input w-full border-t p-4 text-center'>
           <p>&copy; 2025 DevJobs. Todos los derechos reservados.</p>
         </footer>
       </main>
-    </>
+    </div>
   )
 }

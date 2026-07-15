@@ -4,13 +4,11 @@ import type { OfferResponseSummary } from '../types/offer'
 export function OfferCard({ offer }: { offer: OfferResponseSummary }) {
   return (
     <Link to={`/offers/${offer.id}`}>
-      <article
-        className='bg-card text-card-foreground border-border flex flex-col gap-3 rounded-xl border p-4'
-      >
+      <article className='bg-card text-card-foreground border-border flex flex-col gap-3 rounded-xl border p-4'>
         <header className='flex flex-col gap-1'>
           <div className='flex-warp flex justify-between gap-x-2'>
             <h3 className='text-lg font-semibold'>{offer.title}</h3>
-            <ul className='flex gap-x-1.5 text-xs'>
+            <ul className='flex flex-row-reverse flex-wrap gap-x-1.5 gap-y-1 text-xs'>
               <li className='self-center rounded-xl border border-green-200 bg-green-50 px-2.5 py-1 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400'>
                 S/{offer.salary}
               </li>

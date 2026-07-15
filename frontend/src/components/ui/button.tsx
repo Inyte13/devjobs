@@ -1,66 +1,81 @@
-import React from 'react'
+import { Button as ButtonPrimitive } from '@base-ui/react/button'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
-import { Slot } from '@radix-ui/react-slot'
 
-// Los valores por default
+import { cn } from '@/lib/utils'
+
 const buttonVariants = cva(
   [
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg cursor-pointer',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] [&_svg]:size-4',
-    'shrink-0', // No me aplastes, yo mantengo mi tamaño
-    // Para cualquier svg dentro
-    '[&_svg]:pointer-events-none', // Evita que se haga click al svg, solo al btn
-    '[&_svg]:shrink-0', // El icono mantiene su tamaño
-    'transition-colors',
-    // 'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+    'group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 select-none',
+    'font-medium bg-clip-padding', // Para que el fondo no este debajo del borde semitransparente
+    // focus-visible:border-ring
+    // 'transition-all',
+    // 'active:not-aria-[haspopup]:translate-y-px', // El botón se hunde al presionario
   ],
   {
     variants: {
       variant: {
-        primary: 'bg-primary text-primary-foreground hover:bg-primary/90 ',
+        default: 'bg-primary text-foreground hover:bg-primary/80',
+        outline: cn(
+          'border-border bg-background text-primary-foreground hover:bg-muted hover:text-foreground dark:hover:bg-input/50',
+          'aria-expanded:bg-muted aria-expanded:text-foreground'
+          // 'dark:bg-input/30, dark:border-input'
+        ),
+
         secondary:
-          'bg-transparent text-secondary-foreground hover:text-foreground border border-border hover:border-primary/80',
+          'bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
         ghost:
-          'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground',
+          'hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50',
         destructive:
-          'bg-transparent text-destructive/70 hover:text-destructive hover:bg-destructive/10 focus-visible:ring-destructive/20',
+          'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
+        link: 'text-foreground underline-offset-4 hover:underline',
       },
       size: {
-        xs: 'text-xs py-1 h-6 px-2 gap-1 has-[>svg]:px-1.5',
-        sm: 'text-sm py-1.5 h-8 px-3 gap-1.5 has-[>svg]:px-2.5',
-        md: 'text-sm py-2 h-9 px-4 font-medium has-[>svg]:px-3',
-        lg: 'text-base py-2.5 h-10 px-6 has-[>svg]:px-4',
-        icon: 'size-9 [&_svg:not([class*="size-"])]:size-6',
-        'icon-xxs': 'size-5 [&_svg:not([class*="size-"])]:size-3',
-        'icon-xs': 'size-6 [&_svg:not([class*="size-"])]:size-4',
-        'icon-sm': 'size-8 [&_svg:not([class*="size-"])]:size-5',
-        'icon-md': 'size-9 [&_svg:not([class*="size-"])]:size-6',
-        'icon-lg': 'size-10 [&_svg:not([class*="size-"])]:size-7',
+        xs: cn(
+          "h-6 gap-x-0.75 rounded-md px-2 text-xs [&_svg:not([class*='size-'])]:size-3",
+          'in-data-[slot=button-group]:rounded-lg', // Si hay un ancestro button group usa rounded-lg
+          'has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5' // Si hay un descendiente icon, le cambia el padding de su lado
+        ),
+        sm: cn(
+          'h-7 gap-x-1 rounded-lg px-2.5 text-[0.8rem] [&_svg:not([class*="size-"])]:size-3.5',
+          'has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 '
+        ),
+        default: cn(
+          'h-8 gap-x-1.5 rounded-lg px-2.5 text-sm [&_svg:not([class*="size-"])]:size-4',
+          'has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2'
+        ),
+        lg: cn(
+          'h-9 gap-x-1.5 rounded-lg px-2.5 text-sm [&_svg:not([class*="size-"])]:size-4.5',
+          'has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2'
+        ),
+        'icon-xs': cn(
+          "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
+          'in-data-[slot=button-group]:rounded-lg'
+        ),
+        'icon-sm': cn(
+          'size-7 rounded-md [&_svg:not([class*="size-"])]:size-3.5',
+          'in-data-[slot=button-group]:rounded-lg'
+        ),
+        icon: 'size-8 rounded-lg [&_svg:not([class*="size-"])]:size-4',
+        
+        'icon-lg': 'size-9 rounded-lg [&_svg:not([class*="size-"])]:size-4.5',
       },
     },
     defaultVariants: {
-      variant: 'primary',
-      size: 'md',
+      variant: 'default',
+      size: 'default',
     },
   }
 )
 
 function Button({
   className,
-  variant = 'primary',
-  size = 'md',
-  asChild = false,
+  variant = 'default',
+  size = 'default',
   ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : 'button'
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
   return (
-    <Comp
-      // data-slot='button'
-      // data-variant={variant}
-      // data-size={size}
+    <ButtonPrimitive
+      data-slot='button'
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />

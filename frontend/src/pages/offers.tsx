@@ -3,7 +3,11 @@ import { OfferCard } from '@/components/offer-card'
 import { Pagination } from '@/components/pagination'
 import { QueryCombobox } from '@/components/query-combobox'
 
-import { Input } from '@/components/ui/input'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group'
 
 import { useFilters } from '@/hooks/useFilters'
 import { LIMIT, MODALITY_OPTIONS, SENIORITY_OPTIONS } from '@/lib/constants'
@@ -11,7 +15,7 @@ import { locationOptions } from '@/queries/location.queries'
 import { offerSummaryOptions } from '@/queries/offer.queries'
 import { technologyOptions } from '@/queries/technology.queries'
 import { useQuery } from '@tanstack/react-query'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Search } from 'lucide-react'
 
 export default function Offers() {
   const {
@@ -32,9 +36,9 @@ export default function Offers() {
     offerSummaryOptions({ ...filters, limit: LIMIT, offset: offset })
   )
   return (
-    <div className='flex max-w-280 min-w-100 flex-1 flex-col items-center gap-y-10 p-8'>
-      <section className='flex min-h-70 flex-col items-center justify-end gap-y-4'>
-        <header className='flex flex-col gap-y-3 pb-8 text-center'>
+    <div className='flex w-full flex-1 flex-col items-center gap-y-10 p-8'>
+      <section className='flex min-h-70 w-full flex-col items-center justify-end gap-y-4'>
+        <header className='flex max-w-200 min-w-0 flex-col gap-y-3 pb-8 text-center'>
           <h1 className='text-5xl font-bold'>Encuentra tu próximo trabajo</h1>
           <p className='text-lg'>
             Explora miles de oportunidades en el sector tecnológico.
@@ -43,19 +47,23 @@ export default function Offers() {
         <form
           role='search'
           aria-label='Buscar en el sitio'
-          className='bg-card relative z-2 flex w-full rounded-xl p-1.5 text-center'
+          className='w-full max-w-210 min-w-0'
         >
-          <Input
-            value={inputText}
-            placeholder='Buscar empleos por título, habilidad o empresa'
-            autoComplete='off'
-            onChange={e => setInputText(e.target.value)}
-            className='text-card-foreground w-full border-0 outline-none'
-            type='search'
-            aria-label='Buscar'
-          />
+          <InputGroup>
+            <InputGroupInput
+              value={inputText}
+              onChange={e => setInputText(e.target.value)}
+              type='search'
+              placeholder='Buscar empleos por título, habilidad o empresa'
+              aria-label='Buscar'
+              autoComplete='off'
+            />
+            <InputGroupAddon>
+              <Search />
+            </InputGroupAddon>
+          </InputGroup>
         </form>
-        <nav className='flex flex-wrap gap-2 self-start'>
+        <nav className='flex flex-wrap gap-2'>
           <QueryCombobox
             response={locationResponse}
             currentValue={filters.location_id}
@@ -82,7 +90,7 @@ export default function Offers() {
           />
         </nav>
       </section>
-      <section className='flex w-4/5 flex-1 flex-col items-center gap-y-8'>
+      <section className='flex w-full max-w-230 min-w-0 flex-1 flex-col items-center gap-y-8'>
         {isError ? (
           <p className='my-auto p-4'>Error al cargar las ofertas</p>
         ) : !data ? (
@@ -96,7 +104,7 @@ export default function Offers() {
                 No se encontraron empleos
               </p>
             ) : (
-              <ul className='flex w-full flex-1 flex-col gap-y-3'>
+              <ul className='flex flex-1 flex-col gap-y-3'>
                 {data.items.map(offer => (
                   <li key={offer.id}>
                     <OfferCard offer={offer} />

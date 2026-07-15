@@ -1,8 +1,12 @@
 import { BriefcaseBusiness, Building2, Search, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/components/ui/input-group'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -20,7 +24,7 @@ export default function Home() {
   }
 
   return (
-    <div className='flex flex-1 flex-col gap-y-8 w-full pb-8'>
+    <div className='flex w-full flex-1 flex-col gap-y-8 pb-8'>
       <section
         className={cn(
           'relative flex h-[55vh] flex-col items-center justify-center gap-y-9 after:absolute after:z-1',
@@ -47,21 +51,24 @@ export default function Home() {
         </p>
         <form
           onSubmit={handleBusqueda}
-          className='bg-card relative z-2 flex w-full max-w-187.5 rounded-xl p-1.5 text-center'
+          className='relative z-2 w-full max-w-187.5'
           role='search'
           aria-label='Buscar en el sitio'
         >
-          <Input
-            name='busqueda'
-            type='search'
-            placeholder='Buscar empleos por título, habilidad o empresa'
-            autoComplete='off'
-            className='text-card-foreground w-full border-0 outline-none'
-            aria-label='Buscar'
-          />
-          <Button variant='ghost' type='submit' aria-label='Enviar búsqueda'>
-            <Search />
-          </Button>
+          <InputGroup className='bg-card'>
+            <InputGroupInput
+              name='busqueda'
+              type='search'
+              placeholder='Buscar empleos por título, habilidad o empresa'
+              aria-label='Buscar'
+              autoComplete='off'
+            />
+            <InputGroupAddon align='inline-end'>
+              <InputGroupButton type='submit' aria-label='Enviar búsqueda'>
+                <Search />
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
         </form>
       </section>
       <section className='flex min-h-[30vh] flex-col items-center justify-center gap-8'>
@@ -73,9 +80,7 @@ export default function Home() {
         <div className='flex flex-wrap justify-center gap-6 px-4'>
           <article className='bg-card flex max-w-112.5 flex-col gap-4 rounded-xl p-8 text-center'>
             <BriefcaseBusiness className='mx-auto h-12 w-12' />
-            <h3 className='text-xl font-bold'>
-              Encuentra tu trabajo
-            </h3>
+            <h3 className='text-xl font-bold'>Encuentra tu trabajo</h3>
             <p>
               Busca miles de empleos de las mejores empresas de todo el mundo
             </p>

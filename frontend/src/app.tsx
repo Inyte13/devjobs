@@ -9,6 +9,7 @@ import { AuthLayout } from './pages/auth-layout'
 import { Register } from './pages/register'
 import { queryClient } from './lib/query-client'
 import { Applications } from './pages/applications'
+import { Buttons } from './pages/buttons'
 
 const Home = lazy(() => import('./pages/home'))
 const Offers = lazy(() => import('./pages/offers'))
@@ -27,6 +28,7 @@ export function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
         </Route>
+          <Route path='/buttons' element={<Buttons />} />
       </Routes>
 
       <ReactQueryDevtools initialIsOpen={false} />

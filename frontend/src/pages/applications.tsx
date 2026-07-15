@@ -8,7 +8,7 @@ import { Navigate, useLocation } from 'react-router'
 export function Applications() {
   const location = useLocation()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
-  const role = useAuthStore(s => s.role)
+  const role = useAuthStore(s => s.activeRole)
   const {
     data: applications,
     isLoading,
@@ -18,7 +18,7 @@ export function Applications() {
     return <Navigate to='/login' state={location.pathname} replace />
   }
   return (
-    <section className='w-full flex flex-1 flex-col items-center gap-y-10 p-8'>
+    <section className='flex w-full flex-1 flex-col items-center gap-y-10 p-8'>
       {isError || applications === undefined ? (
         <p className='my-auto p-4'>Error al cargar las ofertas</p>
       ) : isLoading ? (
@@ -32,7 +32,7 @@ export function Applications() {
           ) : (
             <ul className='flex w-full flex-1 flex-col gap-y-3'>
               {applications.map(application => (
-                <li className='w-full'key={application.id}>
+                <li className='w-full' key={application.id}>
                   <ApplicationCard application={application} />
                 </li>
               ))}

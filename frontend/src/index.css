@@ -64,7 +64,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.625rem; /* 10px */
   --background: #d1e0ff;
   --foreground: var(--blue-12);
   --card: var(--gray-5);
@@ -102,7 +102,7 @@
 .dark {
   --background: #111111;
   --foreground: var(--gray-12);
-  --card: var(--gray-2);
+  --card: var(--blue-1);
   --card-foreground: var(--gray-12);
   --popover: var(--gray-2);
   --popover-foreground: var(--gray-12);
@@ -112,12 +112,12 @@
   --secondary-foreground: var(--gray-11);
   --muted: var(--gray-2);
   --muted-foreground: var(--gray-10);
-  --accent: var(--blue-a2);
-  --accent-foreground: var(--gray-12);
+  --accent: var(--blue-a3);
+  --accent-foreground: var(--blue-12);
   --destructive: oklch(61% 0.21 25);
   --border: var(--gray-5);
-  --input: var(--gray-5);
-  --ring: var(--gray-5);
+  --input: var(--gray-3);
+  --ring: var(--gray-6);
   /*--chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);

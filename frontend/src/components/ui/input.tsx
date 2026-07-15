@@ -1,32 +1,25 @@
+import * as React from 'react'
+import { Input as InputPrimitive } from '@base-ui/react/input'
+
 import { cn } from '@/lib/utils'
 
-export function Input({
-  className,
-  type,
-  ...props
-}: React.ComponentProps<'input'>) {
+function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   return (
-    <input
+    <InputPrimitive
       type={type}
       data-slot='input'
       className={cn(
-        'placeholder:text-muted-foreground h-9 w-full min-w-0 bg-transparent outline-none',
-        'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
-        'text-base shadow-xs transition-[color,box-shadow]',
-        'border-input rounded-md border px-3 py-1', // Para el input vanilla
-
-        // "file:text-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium",
-
-        // "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-
-        // "aria-invalid:ring-destructive/20 aria-invalid:border-destructive",
-
-        // 'selection:bg-primary selection:text-primary-foreground', // Al seleccionar para copiar, ya lo uso en el global
-
-        // 'md:text-sm', // Para moviles
+        'border-input placeholder:text-muted-foreground focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 h-8 w-full min-w-0 rounded-lg border bg-transparent px-2.5 py-1 text-base outline-none focus-visible:ring-3 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-3',
+        // 'file:text-foreground file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium',
+        // 'focus-visible:border-ring',
+        // 'transition-colors',
+        // 'md:text-sm', // Para móviles
+        // 'dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
         className
       )}
       {...props}
     />
   )
 }
+
+export { Input }

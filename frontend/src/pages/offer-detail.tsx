@@ -14,7 +14,7 @@ export function OfferDetail() {
   const { id } = useParams()
   const { data, isError } = useQuery(offerDetailOptions(id!))
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
-  const role = useAuthStore(s => s.role)
+  const role = useAuthStore(s => s.activeRole)
   const { mutate, isPending } = useCreateApplication(id!)
   const { data: applications } = useQuery(applicationOptions(role))
   const alreadyApplied =

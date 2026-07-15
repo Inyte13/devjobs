@@ -15,6 +15,7 @@ export function FilterCombobox<T extends string>({
   items,
   isLoading,
   isError,
+  className,
 }: {
   selected: {
     label: string
@@ -28,6 +29,7 @@ export function FilterCombobox<T extends string>({
   }[]
   isLoading: boolean
   isError: boolean
+  className?: string
 }) {
   return (
     <Combobox
@@ -36,7 +38,11 @@ export function FilterCombobox<T extends string>({
       onValueChange={item => setFilterParam(item?.value ?? null)}
       items={items}
     >
-      <ComboboxInput placeholder={placeholder} showClear />
+      <ComboboxInput
+        placeholder={placeholder}
+        showClear={true}
+        className='flex-1 min-w-30 max-w-45'
+      />
       <ComboboxContent>
         <ComboboxEmpty>
           {isLoading ? (
