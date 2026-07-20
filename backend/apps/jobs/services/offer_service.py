@@ -35,25 +35,12 @@ class OfferService:
   def get_all_by_recruiter(
     self,
     recruiter_bd: Recruiter,
-    title: str | None,
-    location_id: uuid.UUID | None,
-    modality: Modality | None,
-    technology_id: uuid.UUID | None,
-    seniority: Seniority | None,
   ) -> QuerySet[Offer]:
-    query = Offer.objects.filter(
-      status=True, recruiter=recruiter_bd
-    ).prefetch_related('technologies')
-    if title:
-      query = query.filter(title__icontains=title)
-    if location_id:
-      query = query.filter(location_id=location_id)
-    if modality:
-      query = query.filter(modality=modality)
-    if technology_id:
-      query = query.filter(technologies__id=technology_id)
-    if seniority:
-      query = query.filter(seniority=seniority)
+    query = (
+      Offer.objects.filter(recruiter=recruiter_bd)
+      .prefetch_related('technologies')
+      .order_by('-created')
+    )
     return query
 
   def get(self, id: uuid.UUID) -> Offer:
@@ -81,6 +68,9 @@ class OfferService:
     self, id: uuid.UUID, recruiter_bd: Recruiter, offer: OfferUpdate
   ) -> Offer:
     offer_bd = get_or_raise(Offer, id)
+    if offer_bd.recruiter_id != recruiter_bd.id:  # type: ignore
+      raise PermissionError('No tienes permiso para modificar esta oferta')
+
     offer_data = offer.model_dump(
       exclude_unset=True, exclude={'technologies_ids'}
     )
@@ -94,12 +84,13 @@ class OfferService:
     offer_bd.refresh_from_db()  # type: ignore
     return offer_bd
 
-  def deactivate(self, id: uuid.UUID, recruiter_bd: Recruiter) -> Offer:
+  def deactivate(self, id: uuid.UUID, recruiter_bd: Recruiter) -> None:
     offer_bd = get_or_raise(Offer, id)
+    if offer_bd.recruiter_id != recruiter_bd.id:  # type: ignore
+      raise PermissionError('No tienes permiso para modificar esta oferta')
     offer_bd.status = False
     offer_bd.modifier_id = recruiter_bd.user_id  # type: ignore
     offer_bd.save()
-    return offer_bd
 
 
 offer_service = OfferService()

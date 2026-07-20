@@ -7,6 +7,7 @@ from apps.jobs.schemas.application import ApplicationResponseRecruiter
 from apps.jobs.schemas.offer import (
   OfferCreate,
   OfferResponseDetail,
+  OfferResponseRecruiter,
   OfferResponseSummary,
   OfferUpdate,
 )
@@ -35,20 +36,13 @@ def get_all(
 
 
 @router_offers.get(
-  '/me', auth=RecruiterAuth(), response=list[OfferResponseSummary]
+  '/me', auth=RecruiterAuth(), response=list[OfferResponseRecruiter]
 )
-@paginate(LimitOffsetPagination)
-def get_all_by_recruiter(
-  request,
-  title: str | None = None,
-  location_id: uuid.UUID | None = None,
-  modality: Modality | None = None,
-  technology_id: uuid.UUID | None = None,
-  seniority: Seniority | None = None,
-):
-  return offer_service.get_all_by_recruiter(
-    request.auth, title, location_id, modality, technology_id, seniority
-  )
+def get_all_by_recruiter(request):
+  try:
+    return offer_service.get_all_by_recruiter(request.auth)
+  except PermissionError as e:
+    raise HttpError(403, str(e))
 
 
 @router_offers.get('/{id}', response=OfferResponseDetail)
@@ -81,15 +75,17 @@ def post(request, offer: OfferCreate):
 def patch(request, id: uuid.UUID, offer: OfferUpdate):
   try:
     return offer_service.patch(id, request.auth, offer)
+  except PermissionError as e:
+    raise HttpError(403, str(e))
   except ValueError as e:
     raise HttpError(404, str(e))
 
 
-@router_offers.delete(
-  '/{id}', auth=RecruiterAuth(), response=OfferResponseDetail
-)
+@router_offers.delete('/{id}', auth=RecruiterAuth(), response={204: None})
 def deactivate(request, id: uuid.UUID):
   try:
-    return offer_service.deactivate(id, request.auth)
+    offer_service.deactivate(id, request.auth)
+  except PermissionError as e:
+    raise HttpError(403, str(e))
   except ValueError as e:
     raise HttpError(404, str(e))

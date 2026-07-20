@@ -36,11 +36,10 @@ class CandidateService:
     return candidate_bd
 
   @transaction.atomic
-  def deactivate(self, candidate_bd: Candidate) -> Candidate:
+  def deactivate(self, candidate_bd: Candidate) -> None:
     candidate_bd.status = False
     candidate_bd.modifier_id = candidate_bd.user_id  # type: ignore
     candidate_bd.save()
-    return candidate_bd
 
 
 candidate_service = CandidateService()

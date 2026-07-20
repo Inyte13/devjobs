@@ -3,6 +3,17 @@ from apps.jobs.models.recruiter import Recruiter
 from ninja.errors import HttpError
 from ninja_jwt.authentication import JWTAuth
 
+from apps.jobs.models.user import User
+
+
+class UserAuth(JWTAuth):
+  def authenticate(self, request, token) -> User:
+    # Usamos el authenticate del JWTAuth, que valida y devuelve el user
+    user = super().authenticate(request, token)
+    if not user.is_active:
+      raise HttpError(403, 'Tu usuario está desactivado')
+    return user
+
 
 class RecruiterAuth(JWTAuth):
   def authenticate(self, request, token) -> Recruiter:

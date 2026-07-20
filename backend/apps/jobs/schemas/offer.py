@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from apps.jobs.models.enums import Seniority
 from apps.jobs.models.offer import Modality
-from apps.jobs.schemas.location import LocationResponseSummary
+from apps.jobs.schemas.location import LocationResponseDetail, LocationResponseSummary
 from apps.jobs.schemas.recruiter import (
   RecruiterResponseApplication,
   RecruiterResponsePublic,
@@ -65,7 +65,7 @@ class OfferResponseDetail(Schema):
   recruiter: RecruiterResponsePublic
   title: str
   description_detail: str
-  location: LocationResponseSummary
+  location: LocationResponseDetail
   modality: Modality
   seniority: Seniority
   salary: Decimal | None
@@ -84,6 +84,16 @@ class OfferResponseApplication(Schema):
   model_config = {'from_attributes': True}
   id: uuid.UUID
   recruiter: RecruiterResponseApplication
+  title: str
+  location: LocationResponseSummary
+  modality: Modality
+  seniority: Seniority
+  salary: Decimal | None
+
+
+class OfferResponseRecruiter(Schema):
+  model_config = {'from_attributes': True}
+  id: uuid.UUID
   title: str
   location: LocationResponseSummary
   modality: Modality

@@ -37,5 +37,7 @@ def post(request, application: ApplicationCreate):
 def patch(request, id: uuid.UUID, application: ApplicationUpdate):
   try:
     return application_service.patch(request.auth, id, application)
+  except PermissionError as e:
+    raise HttpError(403, str(e))
   except ValueError as e:
     raise HttpError(400, str(e))

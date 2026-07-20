@@ -5,7 +5,7 @@ from pydantic import BaseModel, field_validator
 
 
 class CandidateCreate(BaseModel):
-  description: str | None = Field(default=None, min_length=2, max_length=500)
+  description: str | None = Field(default=None, max_length=500)
   seniority: Seniority
   experience_years: int = Field(ge=0, le=50)
 
@@ -33,7 +33,7 @@ class CandidateResponsePublic(BaseModel):
 
 
 class CandidateUpdate(BaseModel):
-  description: str | None = Field(default=None, min_length=2, max_length=500)
+  description: str | None = Field(default=None, max_length=500)
   seniority: Seniority | None = None
   experience_years: int | None = Field(default=None, ge=0, le=50)
 

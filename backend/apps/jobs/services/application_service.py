@@ -14,12 +14,12 @@ class ApplicationService:
   ) -> list[Application]:
     offer = get_or_raise(Offer, offer_id)
     if offer.recruiter_id != recruiter_bd.id:  # type: ignore
-      raise ValueError('No tienes permiso para ver estas aplicaciones')
+      raise PermissionError('No tienes permiso para ver estas aplicaciones')
     # Traemos los user de los candidates de una vez con join
     return list(
-      Application.objects.filter(offer_id=offer_id).select_related(
-        'candidate__user'
-      )
+      Application.objects.filter(offer_id=offer_id)
+      .select_related('candidate__user')
+      .order_by('-created')
     )
 
   def get_all_by_candidate(self, candidate_bd: Candidate) -> list[Application]:
@@ -29,6 +29,7 @@ class ApplicationService:
       .select_related(
         'offer__recruiter__user', 'offer__recruiter__company', 'offer__location'
       )
+      .order_by('-created')
     )
 
   def create(
@@ -50,12 +51,9 @@ class ApplicationService:
       modifier_id=candidate_bd.user_id,  # type: ignore
     )
     # Traemos el user de recruiter, location y la company el recruiter además prefetch para technologies
-    return (
-      Application.objects.select_related(
-        'offer__recruiter__user', 'offer__recruiter__company', 'offer__location'
-      )
-      .get(id=application_bd.id)
-    )
+    return Application.objects.select_related(
+      'offer__recruiter__user', 'offer__recruiter__company', 'offer__location'
+    ).get(id=application_bd.id)
 
   def patch(
     self, recruiter_bd: Recruiter, id: uuid.UUID, application: ApplicationUpdate
@@ -63,7 +61,7 @@ class ApplicationService:
     application_bd = get_or_raise(Application, id)
     offer = get_or_raise(Offer, application_bd.offer_id)  # type: ignore
     if offer.recruiter_id != recruiter_bd.id:  # type: ignore
-      raise ValueError('No tienes permiso para modificar estas aplicaciones')
+      raise PermissionError('No tienes permiso para modificar estas aplicación')
 
     application_data = application.model_dump(exclude_unset=True)
     if not application_data:

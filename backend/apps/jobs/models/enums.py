@@ -18,5 +18,5 @@ class Modality(models.TextChoices):
 class Status(models.TextChoices):
   PENDING = 'pending'
   REVIEWED = 'reviewed'
-  REJECTED = 'rejected'
   HIRED = 'hired'
+  REJECTED = 'rejected'

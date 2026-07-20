@@ -35,11 +35,10 @@ class RecruiterService:
     return recruiter_bd
 
   @transaction.atomic
-  def deactivate(self, recruiter_bd: Recruiter) -> Recruiter:
+  def deactivate(self, recruiter_bd: Recruiter):
     recruiter_bd.status = False
     recruiter_bd.modifier_id = recruiter_bd.user_id  # type: ignore
     recruiter_bd.save()
-    return recruiter_bd
 
 
 recruiter_service = RecruiterService()

@@ -80,15 +80,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'devjobs.wsgi.application'
 AUTH_PASSWORD_VALIDATORS = [
   {
-    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-  },
-  {
+    # Mínimo de 8 (default)
     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
   },
   {
-    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-  },
-  {
+    # No puede ser númerico, incluido unicode
     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
   },
 ]

@@ -11,11 +11,13 @@ router_auth = Router(tags=['Auth'])
 def register(request, user: UserCreate):
   try:
     return user_service.create(user)
+  except ValueError as e:
+    raise HttpError(400, str(e))
   except IntegrityError:
     raise HttpError(409, 'El usuario ya existe')
 
 
-# Los demás endpoinsts no los da ninja-extras
+# Los demás endpoints no los da ninja-extras
 
 # login -> pair
 # refresh

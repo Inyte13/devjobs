@@ -1,4 +1,4 @@
-from apps.jobs.api.permissions import RecruiterAuth
+from apps.jobs.api.permissions import RecruiterAuth, UserAuth
 from apps.jobs.schemas.recruiter import (
   RecruiterCreate,
   RecruiterResponsePrivate,
@@ -8,7 +8,6 @@ from apps.jobs.services.recruiter_service import recruiter_service
 from django.db import IntegrityError
 from ninja import Router
 from ninja.errors import HttpError
-from ninja_jwt.authentication import JWTAuth
 
 router_recruiters = Router(tags=['Recruiters'])
 
@@ -21,7 +20,7 @@ def get_me(request):
 
 
 @router_recruiters.post(
-  '', auth=JWTAuth(), response={201: RecruiterResponsePrivate}
+  '', auth=UserAuth(), response={201: RecruiterResponsePrivate}
 )
 def create(request, recruiter: RecruiterCreate):
   try:
@@ -31,7 +30,7 @@ def create(request, recruiter: RecruiterCreate):
 
 
 @router_recruiters.patch(
-  '', auth=RecruiterAuth(), response=RecruiterResponsePrivate
+  '/me', auth=RecruiterAuth(), response=RecruiterResponsePrivate
 )
 def patch(request, recruiter: RecruiterUpdate):
   try:
@@ -40,8 +39,6 @@ def patch(request, recruiter: RecruiterUpdate):
     raise HttpError(409, str(e))
 
 
-@router_recruiters.delete(
-  '', auth=RecruiterAuth(), response=RecruiterResponsePrivate
-)
+@router_recruiters.delete('/me', auth=RecruiterAuth(), response={204: None})
 def deactivate(request):
-  return recruiter_service.deactivate(request.auth)
+  recruiter_service.deactivate(request.auth)

@@ -4,7 +4,6 @@ from apps.jobs.models.enums import Seniority
 from django.conf import settings
 from django.core.validators import (
   MaxValueValidator,
-  MinLengthValidator,
   MinValueValidator,
 )
 from django.db import models
@@ -15,9 +14,7 @@ class Candidate(models.Model):
   user = models.OneToOneField(
     settings.AUTH_USER_MODEL, on_delete=models.PROTECT
   )
-  description = models.CharField(
-    null=True, validators=[MinLengthValidator(2)], max_length=500
-  )
+  description = models.CharField(null=True, max_length=500)
   seniority = models.CharField(
     max_length=7,  # Me obliga max_length aunque sea un enum
     choices=Seniority.choices,

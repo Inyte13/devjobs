@@ -1,7 +1,6 @@
 import uuid
 
 from django.conf import settings
-from django.core.validators import MinLengthValidator
 from django.db import models
 
 
@@ -13,10 +12,8 @@ class Recruiter(models.Model):
   company = models.ForeignKey(
     'Company', on_delete=models.PROTECT, related_name='+'
   )
-  description = models.CharField(
-    null=True, validators=[MinLengthValidator(2)], max_length=500
-  )
   contact_email = models.EmailField()
+  description = models.CharField(null=True, max_length=500)
   status = models.BooleanField(default=True)
   created = models.DateTimeField(auto_now_add=True)
   creator = models.ForeignKey(
