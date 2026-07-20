@@ -1,23 +1,9 @@
 import z from 'zod'
 
-export const recruiterCreate = z.object({
-  description: z.preprocess(
-    v => (v === '' ? undefined : v),
-    z.string().min(2).max(500).optional()
-  ),
+export const recruiter = z.object({
   company_id: z.uuid(),
   contact_email: z.email(),
+  description: z.string().max(500),
 })
 
-export type RecruiterCreate = z.output<typeof recruiterCreate>
-
-export const recruiterUpdate = z.object({
-  description: z.preprocess(
-    v => (v === '' ? undefined : v),
-    z.string().min(2).max(500).optional()
-  ),
-  company_id: z.uuid().optional(),
-  contact_email: z.email().optional(),
-})
-
-export type RecruiterUpdate = z.output<typeof recruiterUpdate>
+export type Recruiter = z.output<typeof recruiter>

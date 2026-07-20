@@ -1,26 +1,10 @@
-import { UserCreate } from '@/schemas/user'
 import { UserResponsePrivate } from '@/types/user'
 import { HttpError } from './errors'
-import { Login } from '@/schemas/auth'
+import { Login, Register } from '@/schemas/auth'
 import { LoginResponse, RefreshResponse } from '@/types/auth'
 import { BASE_URL } from '@/lib/constants'
 
 const URL = `${BASE_URL}/api/token`
-
-export async function register(user: UserCreate): Promise<UserResponsePrivate> {
-  const res = await fetch(`${BASE_URL}/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(user),
-  })
-  if (res.status === 409) {
-    throw new HttpError(409, 'El usuario ya existe')
-  }
-  if (!res.ok) {
-    throw new HttpError(res.status, 'Error al registrar el usuario')
-  }
-  return res.json()
-}
 
 export async function login(credentials: Login): Promise<LoginResponse> {
   const res = await fetch(`${URL}/pair`, {
@@ -30,6 +14,20 @@ export async function login(credentials: Login): Promise<LoginResponse> {
   })
   if (!res.ok) {
     throw new HttpError(res.status, 'Credenciales de acceso incorrectas')
+  }
+  return res.json()
+}
+export async function register(user: Register): Promise<UserResponsePrivate> {
+  const res = await fetch(`${BASE_URL}/api/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user),
+  })
+  if (res.status === 409) {
+    throw new HttpError(409, 'El usuario ya existe')
+  }
+  if (!res.ok) {
+    throw new HttpError(res.status, 'Error al registrar el usuario')
   }
   return res.json()
 }

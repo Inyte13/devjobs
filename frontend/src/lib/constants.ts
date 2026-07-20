@@ -1,8 +1,26 @@
-import { Modality, Seniority } from '@/types/enums'
+import { Modality, Seniority, Status } from '@/types/enums'
 
 export const BASE_URL = import.meta.env.VITE_API_URL || ''
 
 export const LIMIT = 3
+
+export const ROUTES = {
+  home: '/',
+  offers: '/offers',
+  offerDetail: '/offers/:id',
+  toOfferDetail: (id: string) => `/offers/${id}`,
+  toOffersSearch: (title: string) =>
+    `/offers?title=${encodeURIComponent(title)}`,
+  applicationsMe: '/applications/me',
+  profile: '/profile',
+  login: '/login',
+  register: '/register',
+  offersMe: '/offers/me',
+  offersMeCreate: '/offers/me/create',
+  offersMeDetail: '/offers/me/:id',
+  toOfferMeDetail: (id: string) => `/offers/me/${id}`,
+  notFound: '/404',
+} as const
 
 export const SENIORITY_OPTIONS = [
   { label: 'Trainee', value: Seniority.TRAINEE },
@@ -18,4 +36,21 @@ export const MODALITY_OPTIONS = [
   { label: 'Híbrido', value: Modality.HYBRID },
 ]
 
+export const STATUS_OPTIONS = [
+  { label: 'Pendiente', value: Status.PENDING },
+  { label: 'Revisado', value: Status.REVIEWED },
+  { label: 'Rechazado', value: Status.REJECTED },
+  { label: 'Contratado', value: Status.HIRED },
+]
+
+export const STATUS_STYLES: Record<Status, string> = {
+  [Status.PENDING]:
+    'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400',
+  [Status.REVIEWED]:
+    'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-400',
+  [Status.REJECTED]:
+    'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-400',
+  [Status.HIRED]:
+    'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400',
+}
 export const FILTER_PARAMS = ['location_id', 'technology_id'] as const

@@ -7,8 +7,9 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group'
+import { ROUTES } from '@/lib/constants'
 
-export default function Home() {
+export function Home() {
   const navigate = useNavigate()
 
   // currentTarget: burbujea
@@ -16,15 +17,13 @@ export default function Home() {
   const handleBusqueda = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget) // currentTarget por TS
-    const busqueda = String(formData.get('busqueda')) // No es un File
-    const url = busqueda
-      ? `/offers?title=${encodeURIComponent(busqueda)}`
-      : '/offers'
+    const busqueda = String(formData.get('busqueda')) // String porque no es un File
+    const url = busqueda ? ROUTES.toOffersSearch(busqueda) : ROUTES.offers
     navigate(url)
   }
 
   return (
-    <div className='flex w-full flex-1 flex-col gap-y-8 pb-8'>
+    <main className='flex w-full flex-1 flex-col gap-y-8 pb-8'>
       <section
         className={cn(
           'relative flex h-[55vh] flex-col items-center justify-center gap-y-9 after:absolute after:z-1',
@@ -103,6 +102,6 @@ export default function Home() {
           </article>
         </div>
       </section>
-    </div>
+    </main>
   )
 }

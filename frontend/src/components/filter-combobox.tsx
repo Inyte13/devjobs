@@ -9,39 +9,34 @@ import {
 } from './ui/combobox'
 
 export function FilterCombobox<T extends string>({
-  selected,
+  currentValue,
   placeholder,
   setFilterParam,
   items,
   isLoading,
   isError,
-  className,
 }: {
-  selected: {
-    label: string
-    value: T
-  } | null
+  currentValue: string | null
   placeholder: string
   setFilterParam: (value: T | null) => void
   items: {
     label: string
     value: T
   }[]
-  isLoading: boolean
-  isError: boolean
-  className?: string
+  isLoading?: boolean
+  isError?: boolean
 }) {
+  const selected = items.find(item => item.value === currentValue) ?? null
   return (
     <Combobox
       value={selected}
-      // item puede ser null -> ?. value puede ser undefined
       onValueChange={item => setFilterParam(item?.value ?? null)}
       items={items}
     >
       <ComboboxInput
         placeholder={placeholder}
         showClear={true}
-        className='flex-1 min-w-30 max-w-45'
+        className='max-w-45 min-w-30 flex-1'
       />
       <ComboboxContent>
         <ComboboxEmpty>

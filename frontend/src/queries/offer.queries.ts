@@ -1,5 +1,10 @@
 import { validateRetry } from '@/services/errors'
-import { getAllOffers, getOffer } from '@/services/offer-service'
+import {
+  getAllOffers,
+  getApplications,
+  getMeOffers,
+  getOffer,
+} from '@/services/offer-service'
 import { Filters } from '@/types/offer'
 import { queryOptions } from '@tanstack/react-query'
 
@@ -7,6 +12,9 @@ export const offerKeys = {
   all: ['offers'] as const,
   summary: (filters: Filters) => ['offers', 'summary', filters] as const,
   detail: (id: string) => ['offers', 'detail', id] as const,
+  me: ['offers', 'me'] as const,
+  applications: (id: string) =>
+    ['offers', 'detail', id, 'applications'] as const,
 }
 
 export function offerSummaryOptions(filters: Filters) {
@@ -22,5 +30,23 @@ export function offerDetailOptions(id: string) {
     queryKey: offerKeys.detail(id),
     queryFn: () => getOffer(id),
     retry: validateRetry(2),
+    enabled: !!id,
+  })
+}
+
+export function offersMeOptions() {
+  return queryOptions({
+    queryKey: offerKeys.me,
+    queryFn: getMeOffers,
+    retry: validateRetry(2),
+  })
+}
+
+export function offerApplicationsOptions(id: string, enabled: boolean) {
+  return queryOptions({
+    queryKey: offerKeys.applications(id),
+    queryFn: () => getApplications(id),
+    retry: validateRetry(2),
+    enabled,
   })
 }

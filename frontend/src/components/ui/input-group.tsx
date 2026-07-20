@@ -16,7 +16,7 @@ function InputGroupInput({
     <Input
       data-slot='input-group-control'
       className={cn(
-        'min-w-0 flex-1 rounded-none border-0 bg-transparent p-0 text-sm ring-0 focus-visible:ring-0 disabled:bg-transparent disabled:opacity-100 aria-invalid:ring-0',
+        'min-w-0 flex-1 rounded-none border-0 bg-transparent p-0 text-base ring-0 focus-visible:ring-0 disabled:bg-transparent disabled:opacity-100 aria-invalid:ring-0',
         // 'shadow-none dark:bg-transparent dark:disabled:bg-transparent',
         className
       )}
@@ -37,7 +37,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
         'has-[[data-slot][aria-invalid=true]]:border-destructive',
         'has-[[data-slot][aria-invalid=true]]:ring-destructive/20',
 
-        'h-8 w-full min-w-0 rounded-lg border outline-none',
+        'h-9 w-full min-w-0 rounded-lg border outline-none',
         'in-data-[slot=combobox-content]:focus-within:border-inherit',
         'in-data-[slot=combobox-content]:focus-within:ring-0',
         'has-disabled:opacity-50',

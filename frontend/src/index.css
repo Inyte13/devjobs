@@ -10,15 +10,20 @@
   ::-moz-selection {
     @apply bg-primary text-primary-foreground;
   }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+  
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
 }
 
 @custom-variant dark (&:is(.dark *));
 
-@layer base {
-  body {
-    @apply bg-background text-foreground;
-  }
-}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -108,7 +113,7 @@
   --popover-foreground: var(--gray-12);
   --primary: var(--blue-9);
   --primary-foreground: var(--gray-12);
-  --secondary: var(--gray-3);
+  --secondary: var(--gray-2);
   --secondary-foreground: var(--gray-11);
   --muted: var(--gray-2);
   --muted-foreground: var(--gray-10);

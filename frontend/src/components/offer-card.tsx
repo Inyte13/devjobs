@@ -1,9 +1,10 @@
 import { Link } from 'react-router'
 import type { OfferResponseSummary } from '../types/offer'
+import { ROUTES } from '@/lib/constants'
 
 export function OfferCard({ offer }: { offer: OfferResponseSummary }) {
   return (
-    <Link to={`/offers/${offer.id}`}>
+    <Link to={ROUTES.toOfferDetail(offer.id)}>
       <article className='bg-card text-card-foreground border-border flex flex-col gap-3 rounded-xl border p-4'>
         <header className='flex flex-col gap-1'>
           <div className='flex-warp flex justify-between gap-x-2'>

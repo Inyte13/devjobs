@@ -1,7 +1,6 @@
-import { EnumCombobox } from '@/components/enum-combobox'
+import { FilterCombobox } from '@/components/filter-combobox'
 import { OfferCard } from '@/components/offer-card'
 import { Pagination } from '@/components/pagination'
-import { QueryCombobox } from '@/components/query-combobox'
 
 import {
   InputGroup,
@@ -17,7 +16,7 @@ import { technologyOptions } from '@/queries/technology.queries'
 import { useQuery } from '@tanstack/react-query'
 import { Loader2, Search } from 'lucide-react'
 
-export default function Offers() {
+export function Offers() {
   const {
     searchParams,
     inputText,
@@ -35,8 +34,12 @@ export default function Offers() {
   const { data, isError } = useQuery(
     offerSummaryOptions({ ...filters, limit: LIMIT, offset: offset })
   )
+  const itemsTechnology =
+    technologyResponse.data?.map(t => ({ label: t.name, value: t.id })) ?? []
+  const itemsLocation =
+    locationResponse.data?.map(l => ({ label: l.name, value: l.id })) ?? []
   return (
-    <div className='flex w-full flex-1 flex-col items-center gap-y-10 p-8'>
+    <main className='flex w-full flex-1 flex-col items-center gap-y-10 p-8'>
       <section className='flex min-h-70 w-full flex-col items-center justify-end gap-y-4'>
         <header className='flex max-w-200 min-w-0 flex-col gap-y-3 pb-8 text-center'>
           <h1 className='text-5xl font-bold'>Encuentra tu próximo trabajo</h1>
@@ -64,26 +67,30 @@ export default function Offers() {
           </InputGroup>
         </form>
         <nav className='flex flex-wrap gap-2'>
-          <QueryCombobox
-            response={locationResponse}
+          <FilterCombobox
             currentValue={filters.location_id}
             placeholder='Ubicación'
             setFilterParam={setFilter.location_id}
+            items={itemsLocation}
+            isLoading={locationResponse.isLoading}
+            isError={locationResponse.isError}
           />
-          <QueryCombobox
-            response={technologyResponse}
+          <FilterCombobox
             currentValue={filters.technology_id}
             placeholder='Tecnología'
             setFilterParam={setFilter.technology_id}
+            items={itemsTechnology}
+            isLoading={technologyResponse.isLoading}
+            isError={technologyResponse.isError}
           />
-          <EnumCombobox
-            options={MODALITY_OPTIONS}
+          <FilterCombobox
+            items={MODALITY_OPTIONS}
             currentValue={filters.modality}
             placeholder='Modalidad'
             setFilterParam={setModality}
           />
-          <EnumCombobox
-            options={SENIORITY_OPTIONS}
+          <FilterCombobox
+            items={SENIORITY_OPTIONS}
             currentValue={filters.seniority}
             placeholder='Seniority'
             setFilterParam={setSeniority}
@@ -92,7 +99,7 @@ export default function Offers() {
       </section>
       <section className='flex w-full max-w-230 min-w-0 flex-1 flex-col items-center gap-y-8'>
         {isError ? (
-          <p className='my-auto p-4'>Error al cargar las ofertas</p>
+          <p className='my-auto w-full p-4'>Error al cargar las ofertas</p>
         ) : !data ? (
           <p className='my-auto p-4'>
             <Loader2 className='animate-spin' />
@@ -120,6 +127,6 @@ export default function Offers() {
           </>
         )}
       </section>
-    </div>
+    </main>
   )
 }

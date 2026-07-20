@@ -1,72 +1,78 @@
-import { ApplicationResponseCandidate } from '@/types/application'
+import { ApplicationResponseRecruiter } from '@/types/application'
 import { formatDate } from '@/utils/fecha'
-import { Link } from 'react-router'
+import { FormCombobox } from './form-combobox'
+import { STATUS_OPTIONS } from '@/lib/constants'
+import { useForm } from 'react-hook-form'
+import { applicationUpdate, ApplicationUpdate } from '@/schemas/appplication'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from './ui/button'
+import { Check, Loader2 } from 'lucide-react'
+import { useUpdateApplication } from '@/mutations/application.mutations'
 
 export function ApplicationCard({
   application,
+  idOffer,
 }: {
-  application: ApplicationResponseCandidate
+  application: ApplicationResponseRecruiter
+  idOffer: string
 }) {
+  const values: ApplicationUpdate = {
+    status: application.status,
+  }
+  const { handleSubmit, control, formState } = useForm<ApplicationUpdate>({
+    resolver: zodResolver(applicationUpdate),
+    values: values,
+  })
+  const { mutate: update, isPending: isUpdating } = useUpdateApplication(
+    application.id,
+    idOffer
+  )
+  const submit = (application: ApplicationUpdate) => {
+    update(application)
+  }
   return (
-    <Link to={`/offers/${application.offer.id}`}>
-      <article className='bg-card text-card-foreground border-border mx-auto flex max-w-150 min-w-100 justify-between gap-3 rounded-xl border p-4'>
-        <div className='flex-warp flex flex-col justify-between'>
-          <header>
-            <h3 className='text-lg font-semibold'>{application.offer.title}</h3>
-            <p className='text-muted-foreground flex flex-col text-sm capitalize'>
-              <span className='text-secondary-foreground'>
-                {application.offer.recruiter.company.name}
-              </span>
-              <span>
-                {application.offer.location.name} ({application.offer.modality})
-              </span>
-            </p>
-          </header>
-          <p className='text-secondary-foreground flex flex-col gap-x-2 text-sm'>
-            <span>
-              Reclutador: {application.offer.recruiter.user.first_name}
-            </span>
-            <span>Aplicaste el {formatDate(application.created)}</span>
-          </p>
-        </div>
-        <div className='flex flex-col justify-between'>
-          <ul className='flex justify-end gap-x-1.5 text-xs'>
-            <li className='self-center rounded-xl border border-green-200 bg-green-50 px-2.5 py-1 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400'>
-              S/{application.offer.salary}
-            </li>
-            <li className='bg-secondary text-secondary-foreground self-center rounded-xl px-2.5 py-1 capitalize'>
-              {application.offer.seniority}
-            </li>
-          </ul>
-          <div
-            className={
-              'flex items-center justify-center self-end rounded-xl border px-2.5 py-1 ' +
-              {
-                pending:
-                  'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400',
-                reviewed:
-                  'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-400',
-                rejected:
-                  'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-400',
-                hired:
-                  'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400',
-              }[application.status]
-            }
+    <article className='bg-secondary text-card-foreground border-border flex justify-between gap-x-6 rounded-lg border p-4 text-sm'>
+      <div className='flex-warp flex flex-col gap-y-1'>
+        <h3 className='text-base font-semibold'>
+          {application.candidate.user.first_name}{' '}
+          {application.candidate.user.last_name}
+        </h3>
+        <ul className='flex justify-end gap-x-1.5 text-xs'>
+          <li className='bg-card text-secondary-foreground self-center rounded-xl px-2.5 py-1'>
+            {application.candidate.experience_years} año(s) de experiencia
+          </li>
+          <li className='bg-card text-secondary-foreground self-center rounded-xl px-2.5 py-1 capitalize'>
+            {application.candidate.seniority}
+          </li>
+        </ul>
+        <span className='text-secondary-foreground'>
+          Aplicó el {formatDate(application.created)}
+        </span>
+      </div>
+      <div className='flex flex-col justify-around gap-y-2'>
+        <form
+          className='flex items-center gap-x-2'
+          onSubmit={handleSubmit(submit)}
+        >
+          <FormCombobox
+            items={STATUS_OPTIONS}
+            name='status'
+            control={control}
+            label='Status'
+          />
+          <Button
+            size='icon-lg'
+            variant='outline'
+            type='submit'
+            disabled={isUpdating || !formState.isDirty}
           >
-            {
-              {
-                pending: 'Pendiente',
-                reviewed: 'Revisado',
-                rejected: 'Rechazado',
-                hired: 'Contratado',
-              }[application.status]
-            }
-          </div>
-          <span className='text-secondary-foreground flex flex-col gap-x-2 text-sm'>
-            Actualizado el {formatDate(application.modified)}
-          </span>
-        </div>
-      </article>
-    </Link>
+            {isUpdating ? <Loader2 className='animate-spin' /> : <Check />}
+          </Button>
+        </form>
+        <span className='text-secondary-foreground self-end'>
+          Tu última actualización fue el {formatDate(application.modified)}
+        </span>
+      </div>
+    </article>
   )
 }

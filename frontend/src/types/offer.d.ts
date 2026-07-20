@@ -1,5 +1,5 @@
 import { Modality, Seniority } from './enums'
-import { LocationResponseSummary } from './location'
+import { LocationResponseDetail, LocationResponseSummary } from './location'
 import {
   RecruiterResponseApplication,
   RecruiterResponsePublic,
@@ -34,7 +34,7 @@ export interface OfferResponseDetail {
   recruiter: RecruiterResponsePublic
   title: string
   description_detail: string
-  location: LocationResponseSummary
+  location: LocationResponseDetail
   modality: Modality
   seniority: Seniority
   salary: number | null
@@ -52,4 +52,13 @@ export interface OfferResponseApplication {
   modality: Modality
   seniority: Seniority
   salary: number | null
+}
+
+export interface OfferResponseRecruiter {
+  id: string
+  title: string
+  location: LocationResponseSummary
+  modality: Modality
+  seniority: Seniority
+  salary: Decimal | None
 }

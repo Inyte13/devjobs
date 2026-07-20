@@ -2,8 +2,10 @@ import { CompanyResponseSummary } from './company'
 import { UserResponseRecruiter } from './user'
 
 export interface RecruiterResponsePrivate {
-  description: str | null
+  id: string
   company_id: string
+  contact_email: string
+  description: str | null
 }
 
 export interface RecruiterResponseSummary {
@@ -15,6 +17,7 @@ export interface RecruiterResponseApplication extends RecruiterResponseSummary {
 }
 
 export interface RecruiterResponsePublic extends RecruiterResponseSummary {
+  id: string
   user: UserResponseRecruiter
   contact_email: string
 }

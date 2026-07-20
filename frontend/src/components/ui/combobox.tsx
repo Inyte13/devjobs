@@ -98,7 +98,6 @@ function ComboboxInput({
     </InputGroup>
   )
 }
-// TODO: vincular al context de combobox para no repetir hasAddon
 function ComboboxContent({
   className,
   side = 'bottom',
@@ -187,7 +186,7 @@ function ComboboxItem({
     <ComboboxPrimitive.Item
       data-slot='combobox-item'
       className={cn(
-        "data-highlighted:bg-accent data-highlighted:text-accent-foreground flex w-full cursor-default items-center justify-between rounded-md px-1.5 py-1 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "data-highlighted:bg-accent data-highlighted:text-accent-foreground flex w-full cursor-default items-center justify-between rounded-md px-1.5 py-1 text-base outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         'not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground', // Si no es destructive le colocamos a los hijos ese foreground
         // 'gap-2',
         className
@@ -269,11 +268,16 @@ function ComboboxChips({
   ...props
 }: React.ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> &
   ComboboxPrimitive.Chips.Props) {
+  const anchor = React.useContext(ComboboxAnchorContext)
   return (
     <ComboboxPrimitive.Chips
       data-slot='combobox-chips'
+      ref={anchor}
       className={cn(
-        'border-input focus-within:border-ring focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 flex min-h-8 flex-wrap items-center gap-1 rounded-lg border bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors focus-within:ring-3 has-aria-invalid:ring-3 has-data-[slot=combobox-chip]:px-1',
+        'border-input focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 flex min-h-9 flex-wrap items-center gap-1 rounded-lg border bg-transparent bg-clip-padding px-2.5 py-1 text-base focus-within:ring-3 has-aria-invalid:ring-3 has-data-[slot=combobox-chip]:px-1',
+        // 'focus-within:border-ring',
+        // 'dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40',
+        // 'transition-colors',
         className
       )}
       {...props}
@@ -293,7 +297,8 @@ function ComboboxChip({
     <ComboboxPrimitive.Chip
       data-slot='combobox-chip'
       className={cn(
-        'bg-muted text-foreground flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm px-1.5 text-xs font-medium whitespace-nowrap has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0',
+        'bg-muted text-foreground flex w-fit items-center justify-center gap-1 rounded-sm px-1.5 text-xs font-medium whitespace-nowrap has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0',
+        // 'h-[calc(--spacing(5.25))]',
         className
       )}
       {...props}

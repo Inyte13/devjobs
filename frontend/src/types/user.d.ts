@@ -3,9 +3,12 @@ export interface UserResponsePrivate {
   first_name: string
   last_name: string
   email: string
-  date_joined: string
 }
-
+export interface UserResponseMe extends UserResponsePrivate {
+  date_joined: string
+  has_candidate: boolean
+  has_recruiter: boolean
+}
 export interface UserResponseRecruiter {
   first_name: string
 }

@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button'
-import {
-  applicationOptions,
-  useCreateApplication,
-} from '@/queries/application.queries'
+import { ROUTES } from '@/lib/constants'
+import { useCreateApplication } from '@/mutations/application.mutations'
+import { applicationsOptions } from '@/queries/application.queries'
 import { offerDetailOptions } from '@/queries/offer.queries'
+import { userOptions } from '@/queries/user.queries'
 import { useAuthStore } from '@/store/auth-store'
 import { formatDate } from '@/utils/fecha'
 import { useQuery } from '@tanstack/react-query'
@@ -12,34 +12,38 @@ import { Link, useParams } from 'react-router'
 
 export function OfferDetail() {
   const { id } = useParams()
-  const { data, isError } = useQuery(offerDetailOptions(id!))
+  const { data: offerDetail, isError: isErrorOfferDetail } = useQuery(
+    offerDetailOptions(id!)
+  )
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
-  const role = useAuthStore(s => s.activeRole)
+  const { data: user, isError: isErrorUser } = useQuery(
+    userOptions(isAuthenticated)
+  )
   const { mutate, isPending } = useCreateApplication(id!)
-  const { data: applications } = useQuery(applicationOptions(role))
+  const { data: applications } = useQuery(applicationsOptions())
   const alreadyApplied =
     applications?.some(application => application.offer.id === id) ?? false
   return (
-    <div className='flex max-w-230 min-w-100 flex-1 flex-col items-start gap-y-6 p-8'>
-      {isError ? (
+    <main className='flex max-w-230 min-w-100 flex-1 flex-col items-center gap-y-6 p-8'>
+      {isErrorOfferDetail ? (
         <p className='my-auto p-4'>Error al cargar la oferta</p>
-      ) : !data ? (
+      ) : !offerDetail ? (
         <p className='my-auto p-4'>
           <Loader2 className='animate-spin' />
         </p>
       ) : (
         <>
-          <header className='border-border flex w-full justify-between border-b-2 pb-5'>
+          <header className='border-border flex w-full justify-between gap-x-4 border-b-2 pb-5'>
             <div className='flex flex-col gap-y-3'>
-              <h2 className='text-4xl font-bold'>{data.title}</h2>
-              <ul className='flex flex-wrap gap-x-2 capitalize'>
+              <h2 className='text-4xl font-bold'>{offerDetail.title}</h2>
+              <ul className='flex flex-wrap gap-2 capitalize'>
                 <li className='self-center rounded-xl border border-green-200 bg-green-50 px-2.5 py-1 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400'>
-                  S/{data.salary}
+                  S/{offerDetail.salary}
                 </li>
                 <li className='bg-secondary text-secondary-foreground self-center rounded-xl px-2.5 py-1 capitalize'>
-                  {data.seniority}
+                  {offerDetail.seniority}
                 </li>
-                {data.technologies.map(tech => (
+                {offerDetail.technologies.map(tech => (
                   <li
                     key={tech.id}
                     className='border-border text-foreground self-center rounded-xl border px-2.5 py-1'
@@ -49,24 +53,32 @@ export function OfferDetail() {
                 ))}
               </ul>
               <span className='text-muted-foreground'>
-                {formatDate(data.created)}
+                {formatDate(offerDetail.created)}
               </span>
             </div>
             <div className='flex flex-col justify-around'>
               <p className='text-muted-foreground flex flex-col justify-center text-lg font-medium'>
                 <span className='text-secondary-foreground'>
-                  {data.recruiter.company.name}
+                  {offerDetail.recruiter.company.name}
                 </span>
                 <span>
-                  {data.location.name} ({data.modality})
+                  {offerDetail.location.name} ({offerDetail.modality})
                 </span>
               </p>
               {!isAuthenticated ? (
-                <Link to='/login' state={location.pathname}>
+                <Link to={ROUTES.login} state={location.pathname}>
                   <Button>Aplicar</Button>
                 </Link>
-              ) : role !== 'candidate' ? (
+              ) : isErrorUser ? (
                 <Button disabled>Aplicar</Button>
+              ) : !user ? (
+                <Button disabled>
+                  <Loader2 className='animate-spin' />
+                </Button>
+              ) : !user.has_candidate ? (
+                <Link to={ROUTES.profile}>
+                  <Button>Completa tu perfil</Button>
+                </Link>
               ) : alreadyApplied ? (
                 <Button disabled>¡Aplicado!</Button>
               ) : (
@@ -77,24 +89,24 @@ export function OfferDetail() {
             </div>
           </header>
           <p className='text-secondary-foreground border-border border-b-2 pb-6 text-lg'>
-            {data.description_detail}
+            {offerDetail.description_detail}
           </p>
-          <article className='text-secondary-foreground flex flex-col'>
+          <article className='text-secondary-foreground flex flex-col self-start'>
             <span>
               <strong>Reclutador: </strong>
-              {data.recruiter.user.first_name}
+              {offerDetail.recruiter.user.first_name}
             </span>
             <span>
               <strong>Email: </strong>
-              {data.recruiter.contact_email}
+              {offerDetail.recruiter.contact_email}
             </span>
             <span>
               <strong>Ultima modificación: </strong>
-              {formatDate(data.modified)}
+              {formatDate(offerDetail.modified)}
             </span>
           </article>
         </>
       )}
-    </div>
+    </main>
   )
 }
