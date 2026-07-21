@@ -26,10 +26,11 @@ export function Home() {
     <main className='flex w-full flex-1 flex-col gap-y-8 pb-8'>
       <section
         className={cn(
-          'relative flex h-[55vh] flex-col items-center justify-center gap-y-9 after:absolute after:z-1',
+          'relative flex h-[55vh] flex-col items-center justify-center gap-y-9 p-8 after:absolute after:z-1',
           'after:inset-0', // Cubre todo el contenedor
           'after:bg-linear-to-b', // Degradado de arriba -> abajo
-          'after:from-black/50 after:to-black/80',
+          'after:from-white/20 after:to-background',
+          'dark:after:from-black/50 ',
           'after:content-[""]' // Content vacío para que renderice
         )}
       >
@@ -41,7 +42,7 @@ export function Home() {
           )}
           alt='persona-trabajando'
         />
-        <h1 className='relative z-2 text-center text-6xl font-bold'>
+        <h1 className='relative z-2 text-center text-6xl font-bold text-foreground'>
           Encuentra el trabajo de tus sueños
         </h1>
         <p className='relative z-2 max-w-200 text-center text-xl'>
@@ -70,13 +71,13 @@ export function Home() {
           </InputGroup>
         </form>
       </section>
-      <section className='flex min-h-[30vh] flex-col items-center justify-center gap-8'>
+      <section className='flex min-h-[30vh] flex-col items-center justify-center gap-8 p-8'>
         <h2 className='text-4xl'>¿Por qué DevJobs?</h2>
         <p className='max-w-175 text-center text-xl'>
           DevJobs es la principal bolsa de trabajo para desarrolladores.
           Conectamos a los desarrolladores con las mejores empresas del mundo.
         </p>
-        <div className='flex flex-wrap justify-center gap-6 px-4'>
+        <div className='flex flex-wrap justify-center gap-6'>
           <article className='bg-card flex max-w-112.5 flex-col gap-4 rounded-xl p-8 text-center'>
             <BriefcaseBusiness className='mx-auto h-12 w-12' />
             <h3 className='text-xl font-bold'>Encuentra tu trabajo</h3>

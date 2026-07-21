@@ -1,4 +1,4 @@
-import { ROUTES } from '@/lib/constants'
+import { ROUTES, SALARY_STYLES } from '@/lib/constants'
 import { OfferResponseRecruiter } from '@/types/offer'
 import { Link } from 'react-router'
 import {
@@ -31,7 +31,7 @@ export function MyOfferCard({
   return (
     <AccordionItem
       value={offer.id}
-      className='border-border flex flex-col gap-y-2 rounded-lg border'
+      className='border-border flex flex-col gap-y-2 rounded-lg border p-1'
     >
       <AccordionTrigger className='focus-visible-ring-none flex p-0 hover:no-underline focus-visible:border-transparent'>
         <article className='bg-card text-card-foreground flex flex-1 justify-between gap-3 rounded-lg border-none p-4'>
@@ -61,7 +61,11 @@ export function MyOfferCard({
             </p>
           </div>
           <ul className='flex flex-row-reverse flex-wrap gap-x-1.5 gap-y-1 text-xs'>
-            <li className='self-center rounded-xl border border-green-200 bg-green-50 px-2.5 py-1 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400'>
+            <li
+              className={
+                'self-center rounded-xl border px-2.5 py-1' + SALARY_STYLES
+              }
+            >
               S/{offer.salary}
             </li>
             <li className='bg-secondary text-secondary-foreground self-center rounded-xl px-2.5 py-1 capitalize'>
@@ -84,7 +88,7 @@ export function MyOfferCard({
                 No se encontraron applicaciones
               </p>
             ) : (
-              <ul className='flex flex-1 flex-col gap-y-2'>
+              <ul className='flex w-full flex-1 flex-col gap-y-2'>
                 {applications.map(application => (
                   <li key={application.id}>
                     <ApplicationCard

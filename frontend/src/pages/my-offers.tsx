@@ -42,7 +42,7 @@ export function MyOffers() {
                 multiple
                 value={openIds}
                 onValueChange={setOpenIds}
-                className='gap-y-2'
+                className='gap-y-3'
               >
                 {offers.map(offer => (
                   <MyOfferCard

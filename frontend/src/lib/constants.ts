@@ -45,12 +45,16 @@ export const STATUS_OPTIONS = [
 
 export const STATUS_STYLES: Record<Status, string> = {
   [Status.PENDING]:
-    'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400',
+    'border-amber-800/70 bg-amber-100 text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-400',
   [Status.REVIEWED]:
-    'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-400',
+    'border-blue-800/70 bg-blue-100 text-blue-900 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-400',
   [Status.REJECTED]:
-    'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-400',
+    'border-red-800/70 bg-red-100 text-red-900 dark:border-red-800 dark:bg-red-950/40 dark:text-red-400',
   [Status.HIRED]:
-    'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400',
+    'border-green-800/70 bg-green-100 text-green-900 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400',
 }
+
+export const SALARY_STYLES =
+  'border-green-800/70 bg-green-100 text-green-900 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400'
+
 export const FILTER_PARAMS = ['location_id', 'technology_id'] as const

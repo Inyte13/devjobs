@@ -1,4 +1,9 @@
-import { ROUTES, STATUS_OPTIONS, STATUS_STYLES } from '@/lib/constants'
+import {
+  ROUTES,
+  SALARY_STYLES,
+  STATUS_OPTIONS,
+  STATUS_STYLES,
+} from '@/lib/constants'
 import { ApplicationResponseCandidate } from '@/types/application'
 import { formatDate } from '@/utils/fecha'
 import { Link } from 'react-router'
@@ -35,7 +40,11 @@ export function MyApplicationCard({
             <li className='bg-secondary text-secondary-foreground self-center rounded-xl px-2.5 py-1 capitalize'>
               {application.offer.seniority}
             </li>
-            <li className='self-center rounded-xl border border-green-200 bg-green-50 px-2.5 py-1 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400'>
+            <li
+              className={
+                'self-center rounded-xl border px-2.5 py-1 ' + SALARY_STYLES
+              }
+            >
               S/{application.offer.salary}
             </li>
           </ul>

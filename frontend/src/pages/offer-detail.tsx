@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/lib/constants'
+import { ROUTES, SALARY_STYLES } from '@/lib/constants'
 import { useCreateApplication } from '@/mutations/application.mutations'
 import { applicationsOptions } from '@/queries/application.queries'
 import { offerDetailOptions } from '@/queries/offer.queries'
@@ -38,7 +38,11 @@ export function OfferDetail() {
             <div className='flex flex-col gap-y-3'>
               <h2 className='text-4xl font-bold'>{offerDetail.title}</h2>
               <ul className='flex flex-wrap gap-2 capitalize'>
-                <li className='self-center rounded-xl border border-green-200 bg-green-50 px-2.5 py-1 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400'>
+                <li
+                  className={
+                    'self-center rounded-xl border px-2.5 py-1 ' + SALARY_STYLES
+                  }
+                >
                   S/{offerDetail.salary}
                 </li>
                 <li className='bg-secondary text-secondary-foreground self-center rounded-xl px-2.5 py-1 capitalize'>
