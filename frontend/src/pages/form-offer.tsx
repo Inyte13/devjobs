@@ -28,17 +28,17 @@ import { Navigate, useParams } from 'react-router'
 export function FormOffer() {
   const { id } = useParams()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
-
   const {
     data: offerDetail,
     isLoading,
     isError,
   } = useQuery(offerDetailOptions(id!))
-  const { data: recruiter, isError: isErrorRecruiter } = useQuery(
-    recruiterOptions(isAuthenticated)
-  )
   const { data: user, isError: isErrorUser } = useQuery(
     userOptions(isAuthenticated)
+  )
+  const hasRecruiter = isAuthenticated && !!user?.has_recruiter
+  const { data: recruiter, isError: isErrorRecruiter } = useQuery(
+    recruiterOptions(hasRecruiter)
   )
   const { data: companies, isError: isErrorCompanies } =
     useQuery(companyOptions())

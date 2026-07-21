@@ -12,6 +12,8 @@ import { Loader2, SquarePen } from 'lucide-react'
 import { ApplicationCard } from './application-card'
 import { buttonVariants } from './ui/button'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/store/auth-store'
+import { userOptions } from '@/queries/user.queries'
 
 export function MyOfferCard({
   offer,
@@ -20,8 +22,11 @@ export function MyOfferCard({
   offer: OfferResponseRecruiter
   isOpen: boolean
 }) {
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const { data: user } = useQuery(userOptions(isAuthenticated))
+  const hasRecruiter = isAuthenticated && !!user?.has_recruiter
   const { data: applications, isError } = useQuery(
-    offerApplicationsOptions(offer.id, isOpen)
+    offerApplicationsOptions(offer.id, isOpen, hasRecruiter)
   )
   return (
     <AccordionItem
@@ -65,7 +70,7 @@ export function MyOfferCard({
           </ul>
         </article>
       </AccordionTrigger>
-      <AccordionContent className='bg-card flex flex-col rounded-lg p-2 items-center'>
+      <AccordionContent className='bg-card flex flex-col items-center rounded-lg p-2'>
         {isError ? (
           <p className='my-auto p-4'>Error al cargar las applicaciones</p>
         ) : !applications ? (

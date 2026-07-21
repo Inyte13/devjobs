@@ -34,19 +34,24 @@ export function offerDetailOptions(id: string) {
   })
 }
 
-export function offersMeOptions() {
+export function offersMeOptions(hasRecruiter: boolean) {
   return queryOptions({
     queryKey: offerKeys.me,
     queryFn: getMeOffers,
     retry: validateRetry(2),
+    enabled: hasRecruiter,
   })
 }
 
-export function offerApplicationsOptions(id: string, enabled: boolean) {
+export function offerApplicationsOptions(
+  id: string,
+  isOpen: boolean,
+  hasRecruiter: boolean
+) {
   return queryOptions({
     queryKey: offerKeys.applications(id),
     queryFn: () => getApplications(id),
     retry: validateRetry(2),
-    enabled,
+    enabled: isOpen && hasRecruiter,
   })
 }

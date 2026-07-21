@@ -16,10 +16,13 @@ import { FormCombobox } from './form-combobox'
 import { SENIORITY_OPTIONS } from '@/lib/constants'
 import { FormTextarea } from './form-textarea'
 import { Button } from './ui/button'
+import { userOptions } from '@/queries/user.queries'
 
 export function ProfileCandidate() {
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
-  const { data, isError } = useQuery(candidateOptions(isAuthenticated))
+  const { data: user } = useQuery(userOptions(isAuthenticated))
+  const hasCandidate = isAuthenticated && !!user?.has_candidate
+  const { data, isError } = useQuery(candidateOptions(hasCandidate))
   const values: CandidateInput = {
     description: data?.description ?? '',
     seniority: data?.seniority ?? Seniority.TRAINEE,
@@ -109,7 +112,7 @@ export function ProfileCandidate() {
             </Button>
           </form>
           <Button
-            className='w-fit self-start mt-auto'
+            className='mt-auto w-fit self-start'
             size='lg'
             variant='destructive'
             onClick={handleDeactivate}

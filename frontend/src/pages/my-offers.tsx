@@ -3,20 +3,23 @@ import { Accordion } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/lib/constants'
 import { offersMeOptions } from '@/queries/offer.queries'
+import { userOptions } from '@/queries/user.queries'
+import { useAuthStore } from '@/store/auth-store'
 import { useQuery } from '@tanstack/react-query'
 import { Loader2, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 
 export function MyOffers() {
-  const { data: offers, isError } = useQuery(offersMeOptions())
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const { data: user } = useQuery(userOptions(isAuthenticated))
+  const hasRecruiter = isAuthenticated && !!user?.has_recruiter
+  const { data: offers, isError } = useQuery(offersMeOptions(hasRecruiter))
   const [openIds, setOpenIds] = useState<string[]>([])
   return (
     <section className='flex w-full flex-1 justify-center p-8'>
       <div className='flex w-full max-w-150 min-w-120 flex-col items-center gap-y-3'>
-        <h2 className='flex self-start text-4xl font-bold'>
-          Tus ofertas
-        </h2>
+        <h2 className='flex self-start text-4xl font-bold'>Tus ofertas</h2>
         <Link to={ROUTES.offersMeCreate} className='w-full'>
           <Button variant='outline' className='w-full'>
             <Plus />

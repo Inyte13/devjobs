@@ -6,10 +6,11 @@ export const applicationKeys = {
   all: ['applications'] as const,
 }
 
-export function applicationsOptions() {
+export function applicationsOptions(hasCandidate: boolean) {
   return queryOptions({
     queryKey: applicationKeys.all,
     queryFn: () => getMeApplications(),
     retry: validateRetry(2),
+    enabled: hasCandidate,
   })
 }

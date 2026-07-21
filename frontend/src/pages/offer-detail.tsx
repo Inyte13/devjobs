@@ -19,8 +19,9 @@ export function OfferDetail() {
   const { data: user, isError: isErrorUser } = useQuery(
     userOptions(isAuthenticated)
   )
+  const hasCandidate = isAuthenticated && !!user?.has_candidate
+  const { data: applications } = useQuery(applicationsOptions(hasCandidate))
   const { mutate, isPending } = useCreateApplication(id!)
-  const { data: applications } = useQuery(applicationsOptions())
   const alreadyApplied =
     applications?.some(application => application.offer.id === id) ?? false
   return (

@@ -15,10 +15,13 @@ import { FormCombobox } from './form-combobox'
 import { FormTextarea } from './form-textarea'
 import { Button } from './ui/button'
 import { FormInput } from './form-input'
+import { userOptions } from '@/queries/user.queries'
 
 export function ProfileRecruiter() {
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
-  const { data, isError } = useQuery(recruiterOptions(isAuthenticated))
+  const { data: user } = useQuery(userOptions(isAuthenticated))
+  const hasRecruiter = isAuthenticated && !!user?.has_recruiter
+  const { data, isError } = useQuery(recruiterOptions(hasRecruiter))
   const companyResponse = useQuery(companyOptions())
   const itemsCompany =
     companyResponse.data?.map(c => ({ label: c.name, value: c.id })) ?? []
@@ -54,7 +57,7 @@ export function ProfileRecruiter() {
     deactivate()
   }
   return (
-    <article className='flex min-h-130 max-w-100 min-w-70 flex-1 flex-col items-center justify-start gap-y-3 p-4 border border-border rounded-xl'>
+    <article className='border-border flex min-h-130 max-w-100 min-w-70 flex-1 flex-col items-center justify-start gap-y-3 rounded-xl border p-4'>
       {isError ? (
         <p className='my-auto p-4'>Error al cargar el perfil reclutador</p>
       ) : data === undefined ? (
@@ -107,7 +110,7 @@ export function ProfileRecruiter() {
             </Button>
           </form>
           <Button
-            className='w-fit self-start mt-auto'
+            className='mt-auto w-fit self-start'
             size='lg'
             variant='destructive'
             onClick={handleDeactivate}
