@@ -8,10 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 APPEND_SLASH = False
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.getenv(
-  'SECRET_KEY',
-  'django-insecure-sqnb$_(4v)vp*yh#0+rb%md#-4=2hr%f!z849*xp+e%t5lc($_',
-)
+SECRET_KEY = os.getenv('SECRET_KEY')
 PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
 DEBUG = not PRODUCTION
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
