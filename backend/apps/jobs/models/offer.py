@@ -45,7 +45,7 @@ class Offer(models.Model):
     return f'{self.title} - {self.location}'
 
   # force_insert, force_update, using, update_filds, parámetros de django
-  def save(
+  def save(  # type: ignore[override]
     self,
     force_insert: bool = False,
     force_update: bool = False,
@@ -53,7 +53,12 @@ class Offer(models.Model):
     update_fields: Iterable[str] | None = None,
   ) -> None:
     self.title = self.title.strip().upper()
-    super().save(force_insert, force_update, using, update_fields)
+    super().save(
+      force_insert=force_insert,
+      force_update=force_update,
+      using=using,
+      update_fields=update_fields,
+    )
 
   @property
   def description_summary(self) -> str:
