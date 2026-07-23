@@ -51,6 +51,9 @@ export function Offers() {
           role='search'
           aria-label='Buscar en el sitio'
           className='w-full max-w-210 min-w-0'
+          onSubmit={e => {
+            e.preventDefault()
+          }}
         >
           <InputGroup>
             <InputGroupInput
@@ -111,7 +114,7 @@ export function Offers() {
                 No se encontraron empleos
               </p>
             ) : (
-              <ul className='flex flex-1 w-full flex-col gap-y-3'>
+              <ul className='flex w-full flex-1 flex-col gap-y-3'>
                 {data.items.map(offer => (
                   <li key={offer.id}>
                     <OfferCard offer={offer} />
