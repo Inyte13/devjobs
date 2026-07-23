@@ -20,9 +20,18 @@ import { userOptions } from '@/queries/user.queries'
 
 export function ProfileCandidate() {
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
-  const { data: user } = useQuery(userOptions(isAuthenticated))
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useQuery(userOptions(isAuthenticated))
   const hasCandidate = isAuthenticated && !!user?.has_candidate
-  const { data, isError } = useQuery(candidateOptions(hasCandidate))
+  const {
+    data,
+    isLoading: isLoadingCandidate,
+    isError: isErrorCandidate,
+  } = useQuery(candidateOptions(hasCandidate))
+
   const values: CandidateInput = {
     description: data?.description ?? '',
     seniority: data?.seniority ?? Seniority.TRAINEE,
@@ -58,16 +67,21 @@ export function ProfileCandidate() {
       return
     deactivate()
   }
-  console.log(data)
+  const isLoading = isLoadingUser || (hasCandidate && isLoadingCandidate)
+  const isError = isErrorUser || (hasCandidate && isErrorCandidate)
   return (
     <article className='border-border flex min-h-130 max-w-100 min-w-50 flex-1 flex-col items-center justify-start gap-y-3 rounded-xl border p-4'>
       {isError ? (
         <p className='my-auto p-4'>Error al cargar el perfil candidato</p>
+      ) : isLoading ? (
+        <p className='my-auto p-4'>
+          <Loader2 className='animate-spin' />
+        </p>
       ) : (
         <>
           <form
             className='flex w-full flex-col gap-y-3'
-            onSubmit={handleSubmit(data === null ? submitCreate : submitUpdate)}
+            onSubmit={handleSubmit(!hasCandidate ? submitCreate : submitUpdate)}
           >
             <h1 className='text-3xl font-semibold'>Candidate</h1>
             <FormInput
@@ -94,14 +108,12 @@ export function ProfileCandidate() {
               size='lg'
               className='w-fit self-start'
               disabled={
-                isCreating ||
-                isUpdating ||
-                (data !== null && !formState.isDirty)
+                isCreating || isUpdating || (hasCandidate && !formState.isDirty)
               }
             >
               {isCreating || isUpdating ? (
                 <Loader2 className='animate-spin' />
-              ) : data === null ? (
+              ) : !hasCandidate ? (
                 'Crear perfil'
               ) : (
                 'Guardar'
