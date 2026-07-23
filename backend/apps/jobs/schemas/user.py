@@ -22,7 +22,7 @@ class UserCreate(BaseModel):
   def validate_username(cls, v: str) -> str:
     if v.strip() == '':
       raise ValueError('username no puede estar vacío')
-    return v.lower()
+    return v
 
   @field_validator('first_name', 'last_name')
   def validate_first_name_last_name(cls, v: str | None) -> str | None:
