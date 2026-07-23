@@ -21,7 +21,7 @@ export function OfferDetail() {
   )
   const hasCandidate = isAuthenticated && !!user?.has_candidate
   const { data: applications } = useQuery(applicationsOptions(hasCandidate))
-  const { mutate, isPending } = useCreateApplication(id!)
+  const { mutate, isPending, isSuccess } = useCreateApplication(id!)
   const alreadyApplied =
     applications?.some(application => application.offer.id === id) ?? false
   return (
@@ -84,7 +84,7 @@ export function OfferDetail() {
                 <Link to={ROUTES.profile}>
                   <Button>Completa tu perfil</Button>
                 </Link>
-              ) : alreadyApplied ? (
+              ) : alreadyApplied || isSuccess ? (
                 <Button disabled>¡Aplicado!</Button>
               ) : (
                 <Button onClick={() => mutate()} disabled={isPending}>
