@@ -65,7 +65,7 @@ export function FormOffer() {
     values: values,
   })
 
-  const { mutate: create, isPending: isCreating } = useCreateOffer()
+  const { mutate: create, isPending: isCreating, isSuccess } = useCreateOffer()
   const submitCreate = (offer: Offer) => {
     create(offer)
   }
@@ -214,13 +214,18 @@ export function FormOffer() {
             disabled={
               isCreating ||
               isUpdating ||
-              (offerDetail !== null && !formState.isDirty)
+              isSuccess ||
+              (!!id && !formState.isDirty)
             }
           >
             {isCreating || isUpdating ? (
               <Loader2 className='animate-spin' />
             ) : !id ? (
-              'Crear oferta'
+              isSuccess ? (
+                'Oferta creada'
+              ) : (
+                'Crear oferta'
+              )
             ) : (
               'Guardar'
             )}
