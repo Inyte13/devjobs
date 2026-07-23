@@ -58,14 +58,11 @@ export function ProfileCandidate() {
       return
     deactivate()
   }
+  console.log(data)
   return (
     <article className='border-border flex min-h-130 max-w-100 min-w-50 flex-1 flex-col items-center justify-start gap-y-3 rounded-xl border p-4'>
       {isError ? (
         <p className='my-auto p-4'>Error al cargar el perfil candidato</p>
-      ) : data === undefined ? (
-        <p className='my-auto p-4'>
-          <Loader2 className='animate-spin' />
-        </p>
       ) : (
         <>
           <form
