@@ -111,7 +111,7 @@ export function Offers() {
                 No se encontraron empleos
               </p>
             ) : (
-              <ul className='flex flex-1 flex-col gap-y-3'>
+              <ul className='flex flex-1 w-full flex-col gap-y-3'>
                 {data.items.map(offer => (
                   <li key={offer.id}>
                     <OfferCard offer={offer} />

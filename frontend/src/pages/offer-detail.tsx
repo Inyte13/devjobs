@@ -25,7 +25,7 @@ export function OfferDetail() {
   const alreadyApplied =
     applications?.some(application => application.offer.id === id) ?? false
   return (
-    <main className='flex max-w-230 min-w-100 flex-1 flex-col items-center gap-y-6 p-8'>
+    <main className='flex max-w-230 min-w-100 flex-1 flex-col items-start gap-y-6 p-8'>
       {isErrorOfferDetail ? (
         <p className='my-auto p-4'>Error al cargar la oferta</p>
       ) : !offerDetail ? (
@@ -93,7 +93,7 @@ export function OfferDetail() {
               )}
             </div>
           </header>
-          <p className='text-secondary-foreground border-border border-b-2 pb-6 text-lg'>
+          <p className='text-secondary-foreground border-border border-b-2 pb-6 text-lg w-full'>
             {offerDetail.description_detail}
           </p>
           <article className='text-secondary-foreground flex flex-col self-start'>
