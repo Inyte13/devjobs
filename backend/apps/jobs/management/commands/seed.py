@@ -40,4 +40,4 @@ class Command(BaseCommand):
         defaults={'creator_id': admin.id, 'modifier_id': admin.id},
       )
 
-    self.stdout.write(self.style.SUCCESS('Base de datos poblada con éxito'))
+    self.stdout.write(self.style.SUCCESS('Seed ejecutado con éxito'))
