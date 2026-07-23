@@ -110,6 +110,7 @@ export function ProfileRecruiter() {
             size='lg'
             variant='destructive'
             onClick={handleDeactivate}
+            disabled={!hasRecruiter}
           >
             {isDeactivating ? (
               <Loader2 className='animate-spin' />

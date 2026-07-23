@@ -113,6 +113,7 @@ export function ProfileCandidate() {
             size='lg'
             variant='destructive'
             onClick={handleDeactivate}
+            disabled={!hasCandidate}
           >
             {isDeactivating ? (
               <Loader2 className='animate-spin' />
