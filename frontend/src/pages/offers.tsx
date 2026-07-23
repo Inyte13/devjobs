@@ -99,7 +99,7 @@ export function Offers() {
       </section>
       <section className='flex w-full max-w-230 min-w-0 flex-1 flex-col items-center gap-y-8'>
         {isError ? (
-          <p className='my-auto w-full p-4'>Error al cargar las ofertas</p>
+          <p className='my-auto p-4'>Error al cargar las ofertas</p>
         ) : !data ? (
           <p className='my-auto p-4'>
             <Loader2 className='animate-spin' />
