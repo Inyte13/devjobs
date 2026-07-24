@@ -7,6 +7,7 @@ from apps.jobs.api.endpoints.offers import router_offers
 from apps.jobs.api.endpoints.recruiters import router_recruiters
 from apps.jobs.api.endpoints.technologies import router_technologies
 from apps.jobs.api.endpoints.users import router_users
+from apps.jobs.views import home
 from django.contrib import admin
 from django.urls import path
 from ninja_extra import NinjaExtraAPI
@@ -26,3 +27,8 @@ api.add_router('/applications', router_applications)
 api.add_router('/locations', router_locations)
 
 urlpatterns = [path('admin/', admin.site.urls), path('api/', api.urls)]
+urlpatterns = [
+  path('', home),
+  path('admin/', admin.site.urls),
+  path('api/', api.urls),
+]
