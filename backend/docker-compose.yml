@@ -1,3 +1,5 @@
+name: devjobs
+
 services:
   bd:
     image: postgres:16
@@ -8,9 +10,6 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
-      - postgres-devjobs:/var/lib/postgresql/data
-      # Config de \x auto
-      - ~/.psqlrc:/root/.psqlrc
-
+      - bd:/var/lib/postgresql/data
 volumes:
-  postgres-devjobs:
+  bd:
